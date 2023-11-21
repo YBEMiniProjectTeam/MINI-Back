@@ -23,5 +23,4 @@ public class Accommodation {
 	private AccommodationType type;
 	@Embedded
 	private Location location;
-
 }

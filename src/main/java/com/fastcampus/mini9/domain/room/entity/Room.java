@@ -30,8 +30,8 @@ public class Room {
 	private String name;
 	private Integer price;
 	private String description;
-	private Integer capacity;
-	private Integer capacityMax;
+	private int capacity;
+	private int capacityMax;
 	private ZonedDateTime checkIn;
 	private ZonedDateTime checkOut;
 	@OneToMany(mappedBy = "room")

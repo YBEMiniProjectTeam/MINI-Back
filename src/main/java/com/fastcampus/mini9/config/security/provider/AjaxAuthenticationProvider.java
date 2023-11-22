@@ -1,15 +1,14 @@
 package com.fastcampus.mini9.config.security.provider;
 
+import com.fastcampus.mini9.config.security.service.AjaxUserDetailService;
+import com.fastcampus.mini9.config.security.service.UserDetailsWithId;
+import com.fastcampus.mini9.config.security.token.AjaxAuthenticationToken;
+import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.fastcampus.mini9.config.security.service.AjaxUserDetailService;
-import com.fastcampus.mini9.config.security.service.UserDetailsWithId;
-import com.fastcampus.mini9.config.security.token.AjaxAuthenticationToken;
-import com.fastcampus.mini9.config.security.token.UserPrincipal;
 
 public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
@@ -17,7 +16,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
     private final PasswordEncoder passwordEncoder;
 
     public AjaxAuthenticationProvider(AjaxUserDetailService userDetailService,
-        PasswordEncoder passwordEncoder) {
+                                      PasswordEncoder passwordEncoder) {
         this.userDetailService = userDetailService;
         this.passwordEncoder = passwordEncoder;
     }

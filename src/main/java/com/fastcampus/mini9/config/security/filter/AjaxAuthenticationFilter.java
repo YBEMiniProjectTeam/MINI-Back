@@ -1,20 +1,17 @@
 package com.fastcampus.mini9.config.security.filter;
 
+import com.fastcampus.mini9.config.security.token.AjaxAuthenticationToken;
+import com.fastcampus.mini9.domain.member.controller.dto.request.LoginRequestDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.util.StringUtils;
-
-import com.fastcampus.mini9.config.security.token.AjaxAuthenticationToken;
-import com.fastcampus.mini9.domain.member.controller.dto.request.LoginRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -32,11 +29,11 @@ public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		//    throw new IllegalStateException("Authentication is not supported");
 		//}
 		LoginRequestDto loginRequestDto = objectMapper.readValue(request.getReader(), LoginRequestDto.class);
-		if (!StringUtils.hasText(loginRequestDto.email()) || !StringUtils.hasText(loginRequestDto.password())) {
+		if (!StringUtils.hasText(loginRequestDto.email()) || !StringUtils.hasText(loginRequestDto.pwd())) {
 			throw new UsernameNotFoundException("Username Or Password is Empty");
 		}
 		AjaxAuthenticationToken authRequest = AjaxAuthenticationToken
-			.unauthenticated(loginRequestDto.email(), loginRequestDto.password());
+			.unauthenticated(loginRequestDto.email(), loginRequestDto.pwd());
 		setDetails(request, authRequest);
 		return getAuthenticationManager().authenticate(authRequest);
 	}

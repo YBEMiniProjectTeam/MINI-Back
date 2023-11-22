@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fastcampus.mini9.common.util.cookie.CookieUtil;
@@ -36,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		this.authenticationManager = authenticationManager;
 		this.authenticationDetailsSource = authenticationDetailsSource;
 	}
+	private static final String grantType = "Bearer";
 
 	@Override
 	public void afterPropertiesSet() {
@@ -57,9 +59,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
         String authHeader = request.getHeader("Authorization");
+		String accessToken = resolveToken(authHeader);
         Optional<Cookie> refreshToken = CookieUtil.getCookie(request, "refresh-token");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String accessToken = authHeader.substring(7);
+        if (accessToken != null) {
 			JwtAuthenticationToken jwtAuth = JwtAuthenticationToken.unauthenticated(
 				accessToken,
 				refreshToken.isPresent() ? refreshToken.get().getValue() : "empty");
@@ -106,5 +108,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	protected void onUnsuccessfulAuthentication(HttpServletRequest request,
 		HttpServletResponse response, AuthenticationException failed) {
+	}
+
+	public String resolveToken(String authorization) {
+		if (StringUtils.hasText(authorization) && authorization.startsWith(grantType)) {
+			return authorization.substring(grantType.length() + 1);
+		}
+		return null;
 	}
 }

@@ -54,7 +54,7 @@ public class SecurityConfig {
 	private String gatewayUrl;
 	private String frontUrlLocal = "http://localhost:3000";
 
-	private static final String loginProcUrl = "/login";
+	private static final String loginProcUrl = "/api/login";
 
 	@Autowired
 	private AuthenticationConfiguration authenticationConfiguration;
@@ -84,9 +84,11 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 				.requestMatchers(SWAGGER_PAGE).permitAll()
-				.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products")).permitAll()
-				.anyRequest().permitAll());
-
+				.requestMatchers("/error/**").permitAll()
+//				.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products")).permitAll()
+				.requestMatchers("/api/login").permitAll()
+				.requestMatchers("/api/sign-up").permitAll()
+				.anyRequest().authenticated());
 		http
 			.apply(
 				new AjaxAuthenticationFilterConfigurer(new AjaxAuthenticationFilter(loginProcUrl), loginProcUrl))

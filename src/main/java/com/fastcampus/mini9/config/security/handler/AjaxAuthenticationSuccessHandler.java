@@ -1,7 +1,10 @@
 package com.fastcampus.mini9.config.security.handler;
 
+import com.fastcampus.mini9.common.response.DataResponseBody;
 import java.io.IOException;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -51,6 +54,8 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        objectMapper.writeValue(response.getWriter(), BaseResponseBody.success("login success"));
+        Map<String, String> tokenData = new HashMap<>();
+        tokenData.put("access_token", accessToken);
+        objectMapper.writeValue(response.getWriter(),  DataResponseBody.success(tokenData));
     }
 }

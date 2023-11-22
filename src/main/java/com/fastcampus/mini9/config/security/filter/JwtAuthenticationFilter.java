@@ -56,11 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 			return;
 		}
-		Optional<Cookie> accessToken = CookieUtil.getCookie(request, "access-token");
-		Optional<Cookie> refreshToken = CookieUtil.getCookie(request, "refresh-token");
-		if (accessToken.isPresent()) {
+        String authHeader = request.getHeader("Authorization");
+        Optional<Cookie> refreshToken = CookieUtil.getCookie(request, "refresh-token");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String accessToken = authHeader.substring(7);
 			JwtAuthenticationToken jwtAuth = JwtAuthenticationToken.unauthenticated(
-				accessToken.get().getValue(),
+				accessToken,
 				refreshToken.isPresent() ? refreshToken.get().getValue() : "empty");
 			setDetails(request, jwtAuth);
 			// Attempt authentication via AuthenticationManager

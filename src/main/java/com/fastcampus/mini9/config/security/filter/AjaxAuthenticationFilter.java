@@ -32,11 +32,11 @@ public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		//    throw new IllegalStateException("Authentication is not supported");
 		//}
 		LoginRequestDto loginRequestDto = objectMapper.readValue(request.getReader(), LoginRequestDto.class);
-		if (!StringUtils.hasText(loginRequestDto.email()) || !StringUtils.hasText(loginRequestDto.password())) {
+		if (!StringUtils.hasText(loginRequestDto.email()) || !StringUtils.hasText(loginRequestDto.pwd())) {
 			throw new UsernameNotFoundException("Username Or Password is Empty");
 		}
 		AjaxAuthenticationToken authRequest = AjaxAuthenticationToken
-			.unauthenticated(loginRequestDto.email(), loginRequestDto.password());
+			.unauthenticated(loginRequestDto.email(), loginRequestDto.pwd());
 		setDetails(request, authRequest);
 		return getAuthenticationManager().authenticate(authRequest);
 	}

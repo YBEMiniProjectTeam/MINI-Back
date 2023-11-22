@@ -40,7 +40,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         // access-token
         String accessToken = jwtProvider.generateAccessToken(authentication);
 
-        CookieUtil.addCookie(response, "access-token", accessToken, 60 * 30);
+        CookieUtil.addCookieWithoutSecure(response, "access-token", accessToken, 60 * 30);
 
         // refresh-token
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();

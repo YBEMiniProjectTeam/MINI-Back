@@ -1,19 +1,5 @@
 package com.fastcampus.mini9.config.security;
 
-import com.fastcampus.mini9.config.security.exception.AjaxAuthenticationEntryPoint;
-import com.fastcampus.mini9.config.security.filter.AjaxAuthenticationFilter;
-import com.fastcampus.mini9.config.security.filter.AjaxAuthenticationFilterConfigurer;
-import com.fastcampus.mini9.config.security.filter.JwtAuthenticationFilter;
-import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationFailureHandler;
-import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationSuccessHandler;
-import com.fastcampus.mini9.config.security.provider.AjaxAuthenticationProvider;
-import com.fastcampus.mini9.config.security.provider.JwtProvider;
-import com.fastcampus.mini9.config.security.service.AjaxUserDetailService;
-import com.fastcampus.mini9.config.security.service.RefreshTokenService;
-import com.fastcampus.mini9.config.security.token.AuthenticationDetails;
-import com.fastcampus.mini9.config.security.token.UserPrincipal;
-import com.fastcampus.mini9.domain.member.repository.MemberRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,128 +28,151 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.fastcampus.mini9.config.security.exception.AjaxAuthenticationEntryPoint;
+import com.fastcampus.mini9.config.security.filter.AjaxAuthenticationFilter;
+import com.fastcampus.mini9.config.security.filter.AjaxAuthenticationFilterConfigurer;
+import com.fastcampus.mini9.config.security.filter.JwtAuthenticationFilter;
+import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationFailureHandler;
+import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationSuccessHandler;
+import com.fastcampus.mini9.config.security.handler.JwtLogoutHandler;
+import com.fastcampus.mini9.config.security.handler.JwtLogoutSuccessHandler;
+import com.fastcampus.mini9.config.security.provider.AjaxAuthenticationProvider;
+import com.fastcampus.mini9.config.security.provider.JwtProvider;
+import com.fastcampus.mini9.config.security.service.AjaxUserDetailService;
+import com.fastcampus.mini9.config.security.service.RefreshTokenService;
+import com.fastcampus.mini9.config.security.token.AuthenticationDetails;
+import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.member.repository.MemberRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String loginProcUrl = "/login";
-    private static final String[] SWAGGER_PAGE = {
-        "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
-        "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
-    };
-    @Value("${remote-server.front.url}")
-    private String frontUrl;
-    @Value("${remote-server.gateway.url}")
-    private String gatewayUrl;
-    private String frontUrlLocal = "http://localhost:3000";
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
-    @Autowired
-    private JwtProvider jwtProvider;
-    @Autowired
-    private RefreshTokenService refreshTokenService;
-    @Autowired
-    private MemberRepository memberRepository;
+	@Value("${remote-server.front.url}")
+	private String frontUrl;
+	@Value("${remote-server.gateway.url}")
+	private String gatewayUrl;
+	private String frontUrlLocal = "http://localhost:3000";
 
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+	private static final String loginProcUrl = "/login";
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .httpBasic(HttpBasicConfigurer::disable)
-            .formLogin(FormLoginConfigurer::disable)
-            .csrf(CsrfConfigurer::disable)
-            .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
-                .configurationSource(corsConfigurationSource()));
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+	@Autowired
+	private JwtProvider jwtProvider;
+	@Autowired
+	private RefreshTokenService refreshTokenService;
+	@Autowired
+	private MemberRepository memberRepository;
 
-        http
-            .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                .requestMatchers(SWAGGER_PAGE).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products"))
-                .permitAll()
-                .anyRequest().permitAll());
+	private static final String[] SWAGGER_PAGE = {
+		"/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
+		"/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
+	};
 
-        http
-            .apply(
-                new AjaxAuthenticationFilterConfigurer(new AjaxAuthenticationFilter(loginProcUrl),
-                    loginProcUrl))
-            .setAuthenticationManager(authenticationManager())
-            .successHandlerAjax(
-                new AjaxAuthenticationSuccessHandler(jwtProvider, refreshTokenService))
-            .failureHandlerAjax(new AjaxAuthenticationFailureHandler())
-            .setAuthenticationDetailsSource(authenticationDetailsSource())
-            .loginProcessingUrl(loginProcUrl);
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+			.httpBasic(HttpBasicConfigurer::disable)
+			.formLogin(FormLoginConfigurer::disable)
+			.csrf(CsrfConfigurer::disable)
+			.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer
+				.configurationSource(corsConfigurationSource()));
 
-        http
-            .addFilterBefore(
-                new JwtAuthenticationFilter(authenticationManager(), authenticationDetailsSource()),
-                AnonymousAuthenticationFilter.class);
+		http
+			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+				.requestMatchers(SWAGGER_PAGE).permitAll()
+				.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products")).permitAll()
+				.anyRequest().permitAll());
 
-        http
-            .anonymous((anonymous) -> anonymous
-                .principal(new UserPrincipal(null, "anonymous")));
+		http
+			.logout((logout) -> logout
+				.logoutUrl("/logout")
+				.addLogoutHandler(new JwtLogoutHandler())
+				.logoutSuccessHandler(new JwtLogoutSuccessHandler()));
 
-        http
-            .exceptionHandling((exceptionHandling) -> exceptionHandling
-                .authenticationEntryPoint(new AjaxAuthenticationEntryPoint()));
+		http
+			.apply(
+				new AjaxAuthenticationFilterConfigurer(new AjaxAuthenticationFilter(loginProcUrl), loginProcUrl))
+			.setAuthenticationManager(authenticationManager())
+			.successHandlerAjax(new AjaxAuthenticationSuccessHandler(jwtProvider, refreshTokenService))
+			.failureHandlerAjax(new AjaxAuthenticationFailureHandler())
+			.setAuthenticationDetailsSource(authenticationDetailsSource())
+			.loginProcessingUrl(loginProcUrl);
 
-        http
-            .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
-                .frameOptions(FrameOptionsConfig::sameOrigin));
+		http
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), authenticationDetailsSource()),
+				AnonymousAuthenticationFilter.class);
 
-        return http.build();
-    }
+		http
+			.anonymous((anonymous) -> anonymous
+				.principal(new UserPrincipal(null, "anonymous")));
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
+		http
+			.exceptionHandling((exceptionHandling) -> exceptionHandling
+				.authenticationEntryPoint(new AjaxAuthenticationEntryPoint()));
 
-        corsConfiguration.addAllowedOriginPattern("*");
-        //        corsConfiguration.addAllowedOrigin(frontUrl);
-        //        corsConfiguration.addAllowedOrigin(gatewayUrl);
-        //        corsConfiguration.addAllowedOrigin(frontUrlLocal);
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
+		http
+			.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
+				.frameOptions(FrameOptionsConfig::sameOrigin));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
+		return http.build();
+	}
 
-        return source;
-    }
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-    @Bean
-    public SecurityContextRepository securityContextRepository() {
-        return new NullSecurityContextRepository();
-    }
+		corsConfiguration.addAllowedOriginPattern("*");
+		//        corsConfiguration.addAllowedOrigin(frontUrl);
+		//        corsConfiguration.addAllowedOrigin(gatewayUrl);
+		//        corsConfiguration.addAllowedOrigin(frontUrlLocal);
+		corsConfiguration.addAllowedHeader("*");
+		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.setAllowCredentials(true);
 
-    @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
 
-    @Bean
-    public AuthenticationDetailsSource<HttpServletRequest,
-        WebAuthenticationDetails> authenticationDetailsSource() {
-        return context -> new AuthenticationDetails(context);
-    }
+		return source;
+	}
 
-    @Bean
-    public AjaxAuthenticationProvider authenticationProvider(AuthenticationManagerBuilder auth,
-                                                             JwtProvider jwtProvider) {
-        AjaxAuthenticationProvider ajaxAuthenticationProvider = new AjaxAuthenticationProvider(
-            ajaxUserDetailService(), passwordEncoder());
-        auth.authenticationProvider(ajaxAuthenticationProvider).authenticationProvider(jwtProvider);
-        return ajaxAuthenticationProvider;
-    }
+	@Bean
+	public SecurityContextRepository securityContextRepository() {
+		return new NullSecurityContextRepository();
+	}
 
-    @Bean
-    public AjaxUserDetailService ajaxUserDetailService() {
-        return new AjaxUserDetailService(memberRepository);
-    }
+	@Bean
+	public AuthenticationManager authenticationManager() throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
+	@Bean
+	public AuthenticationDetailsSource<HttpServletRequest,
+		WebAuthenticationDetails> authenticationDetailsSource() {
+		return context -> new AuthenticationDetails(context);
+	}
+
+	@Bean
+	public AjaxAuthenticationProvider authenticationProvider(AuthenticationManagerBuilder auth,
+		JwtProvider jwtProvider) {
+		AjaxAuthenticationProvider ajaxAuthenticationProvider = new AjaxAuthenticationProvider(
+			ajaxUserDetailService(), passwordEncoder());
+		auth.authenticationProvider(ajaxAuthenticationProvider).authenticationProvider(jwtProvider);
+		return ajaxAuthenticationProvider;
+	}
+
+	@Bean
+	public AjaxUserDetailService ajaxUserDetailService() {
+		return new AjaxUserDetailService(memberRepository);
+	}
+
+	@Bean
+	public static PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 }

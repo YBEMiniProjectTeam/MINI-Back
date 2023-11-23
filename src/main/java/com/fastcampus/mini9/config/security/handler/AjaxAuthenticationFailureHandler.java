@@ -32,7 +32,6 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
         } else if (exception instanceof InsufficientAuthenticationException) {
             errorMessage = "Invalid Secret Key";
         } else if (exception instanceof UsernameNotFoundException) {
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
             errorMessage = exception.getMessage();
         }
 

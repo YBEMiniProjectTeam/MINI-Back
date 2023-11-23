@@ -34,6 +34,7 @@ public class Room {
 	private int capacityMax;
 	private ZonedDateTime checkIn;
 	private ZonedDateTime checkOut;
+	private int numberOfRooms;
 	@OneToMany(mappedBy = "room")
 	private List<Stock> stockList = new ArrayList<>();
 }

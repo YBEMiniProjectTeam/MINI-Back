@@ -99,7 +99,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		HttpServletResponse response, Authentication authResult) {
 		if (authResult instanceof JwtAuthenticationToken jwtAuthToken
 			&& jwtAuthToken.isRegenerated()) {
-			CookieUtil.addCookie(response, "access-token", jwtAuthToken.getNewAccessToken(),
+			CookieUtil.addCookieWithoutHttp(response, "access-token", jwtAuthToken.getNewAccessToken(),
 				60 * 24);
 			CookieUtil.addCookie(response, "refresh-token", jwtAuthToken.getNewRefreshToken(),
 				60 * 60 * 24);

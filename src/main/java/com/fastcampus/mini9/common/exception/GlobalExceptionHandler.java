@@ -1,5 +1,6 @@
 package com.fastcampus.mini9.common.exception;
 
+import com.fastcampus.mini9.common.response.ErrorResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.fastcampus.mini9.common.response.ErrorResponseBody;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -19,9 +18,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseBody> handleException(MethodArgumentNotValidException ex) {
         logger.warn("invalid request", ex);
+        String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         return ResponseEntity
             .badRequest()
-            .body(new ErrorResponseBody(false, 400, ex.getMessage(), ex));
+            .body(new ErrorResponseBody(false, 400, errorMessage, ex));
     }
 
     @ExceptionHandler(BaseException.class)

@@ -29,12 +29,13 @@ public class CookieUtil {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         cookie.setAttribute("Samesite", "Lax");
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
 
-    public static void addCookieWithoutSecure(
+    public static void addCookieWithoutHttp(
         HttpServletResponse response,
         String name,
         String value,
@@ -42,6 +43,8 @@ public class CookieUtil {
     ) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
+        cookie.setHttpOnly(false);
+        cookie.setSecure(true);
         cookie.setAttribute("Samesite", "Lax");
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);

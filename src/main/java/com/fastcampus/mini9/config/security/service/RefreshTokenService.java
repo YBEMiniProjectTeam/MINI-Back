@@ -43,7 +43,7 @@ public class RefreshTokenService {
             refreshTokenRepository.saveAndFlush(refreshToken.get());
         } else {
             refreshTokenRepository.saveAndFlush(
-                RefreshToken.create(userId, refreshTokenValue, clientIp, userAgent));
+                new RefreshToken(userId, refreshTokenValue, clientIp, userAgent));
         }
 
         return refreshTokenValue;

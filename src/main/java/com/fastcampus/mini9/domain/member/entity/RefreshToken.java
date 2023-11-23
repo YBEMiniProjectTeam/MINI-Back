@@ -37,11 +37,6 @@ public class RefreshToken {
         this.userAgent = userAgent;
     }
 
-    public static RefreshToken create(Long userId, String tokenValue, String ipAdd,
-                                      String userAgent) {
-        return new RefreshToken(userId, tokenValue, ipAdd, userAgent);
-    }
-
     public void update(Long userId, String tokenValue) {
         this.userId = userId;
         this.tokenValue = tokenValue;

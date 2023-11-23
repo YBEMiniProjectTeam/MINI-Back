@@ -46,7 +46,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String loginProcUrl = "/api/login";
+    private static final String loginProcUrl = "/login";
     private static final String[] SWAGGER_PAGE = {
         "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
         "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"

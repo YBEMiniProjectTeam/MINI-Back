@@ -15,30 +15,33 @@ import org.springframework.util.StringUtils;
 
 public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-	public AjaxAuthenticationFilter(String defaultFilterProcessesUrl) {
-		super(defaultFilterProcessesUrl);
-	}
+    public AjaxAuthenticationFilter(String defaultFilterProcessesUrl) {
+        super(defaultFilterProcessesUrl);
+    }
 
-	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
-		AuthenticationException, IOException, ServletException {
-		//boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-		//if (!isAjax) {
-		//    throw new IllegalStateException("Authentication is not supported");
-		//}
-		LoginRequestDto loginRequestDto = objectMapper.readValue(request.getReader(), LoginRequestDto.class);
-		if (!StringUtils.hasText(loginRequestDto.email()) || !StringUtils.hasText(loginRequestDto.pwd())) {
-			throw new UsernameNotFoundException("Username Or Password is Empty");
-		}
-		AjaxAuthenticationToken authRequest = AjaxAuthenticationToken
-			.unauthenticated(loginRequestDto.email(), loginRequestDto.pwd());
-		setDetails(request, authRequest);
-		return getAuthenticationManager().authenticate(authRequest);
-	}
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request,
+                                                HttpServletResponse response) throws
+        AuthenticationException, IOException, ServletException {
+        //boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+        //if (!isAjax) {
+        //    throw new IllegalStateException("Authentication is not supported");
+        //}
+        LoginRequestDto loginRequestDto =
+            objectMapper.readValue(request.getReader(), LoginRequestDto.class);
+        if (!StringUtils.hasText(loginRequestDto.email()) ||
+            !StringUtils.hasText(loginRequestDto.pwd())) {
+            throw new UsernameNotFoundException("Username Or Password is Empty");
+        }
+        AjaxAuthenticationToken authRequest = AjaxAuthenticationToken
+            .unauthenticated(loginRequestDto.email(), loginRequestDto.pwd());
+        setDetails(request, authRequest);
+        return getAuthenticationManager().authenticate(authRequest);
+    }
 
-	protected void setDetails(HttpServletRequest request, AjaxAuthenticationToken authRequest) {
-		authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
-	}
+    protected void setDetails(HttpServletRequest request, AjaxAuthenticationToken authRequest) {
+        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+    }
 }

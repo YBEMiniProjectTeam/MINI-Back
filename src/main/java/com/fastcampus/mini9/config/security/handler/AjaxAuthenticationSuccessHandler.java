@@ -1,26 +1,22 @@
 package com.fastcampus.mini9.config.security.handler;
 
 import com.fastcampus.mini9.common.response.DataResponseBody;
-import java.io.IOException;
-
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import com.fastcampus.mini9.common.response.BaseResponseBody;
 import com.fastcampus.mini9.common.util.cookie.CookieUtil;
 import com.fastcampus.mini9.config.security.provider.JwtProvider;
 import com.fastcampus.mini9.config.security.service.RefreshTokenService;
 import com.fastcampus.mini9.config.security.token.AuthenticationDetails;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -29,14 +25,15 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     private final RefreshTokenService refreshTokenService;
 
     public AjaxAuthenticationSuccessHandler(JwtProvider jwtProvider,
-        RefreshTokenService refreshTokenService) {
+                                            RefreshTokenService refreshTokenService) {
         this.jwtProvider = jwtProvider;
         this.refreshTokenService = refreshTokenService;
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication)
+        throws IOException, ServletException {
         // access-token
         String accessToken = jwtProvider.generateAccessToken(authentication);
 
@@ -56,6 +53,6 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         Map<String, String> tokenData = new HashMap<>();
         tokenData.put("access_token", accessToken);
-        objectMapper.writeValue(response.getWriter(),  DataResponseBody.success(tokenData));
+        objectMapper.writeValue(response.getWriter(), DataResponseBody.success(tokenData));
     }
 }

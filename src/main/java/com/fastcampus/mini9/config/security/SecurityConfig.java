@@ -6,6 +6,8 @@ import com.fastcampus.mini9.config.security.filter.AjaxAuthenticationFilterConfi
 import com.fastcampus.mini9.config.security.filter.JwtAuthenticationFilter;
 import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationFailureHandler;
 import com.fastcampus.mini9.config.security.handler.AjaxAuthenticationSuccessHandler;
+import com.fastcampus.mini9.config.security.handler.JwtLogoutHandler;
+import com.fastcampus.mini9.config.security.handler.JwtLogoutSuccessHandler;
 import com.fastcampus.mini9.config.security.provider.AjaxAuthenticationProvider;
 import com.fastcampus.mini9.config.security.provider.JwtProvider;
 import com.fastcampus.mini9.config.security.service.AjaxUserDetailService;
@@ -87,6 +89,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/login").permitAll()
                 .requestMatchers("/api/sign-up").permitAll()
                 .anyRequest().authenticated());
+
+        http
+            .logout((logout) -> logout
+                .logoutUrl("/logout")
+                .addLogoutHandler(new JwtLogoutHandler())
+                .logoutSuccessHandler(new JwtLogoutSuccessHandler()));
 
         http
             .apply(

@@ -1,10 +1,8 @@
 package com.fastcampus.mini9.config.security.token;
 
-import java.util.Objects;
-
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Objects;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 public class AuthenticationDetails extends WebAuthenticationDetails {
 
@@ -15,14 +13,6 @@ public class AuthenticationDetails extends WebAuthenticationDetails {
         super(request);
         this.clientIp = extractClientIp(request);
         this.userAgent = request.getHeader("User-Agent");
-    }
-
-    public String getClientIp() {
-        return clientIp;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
     }
 
     private static String extractClientIp(HttpServletRequest request) {
@@ -43,6 +33,14 @@ public class AuthenticationDetails extends WebAuthenticationDetails {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
     }
 
     @Override

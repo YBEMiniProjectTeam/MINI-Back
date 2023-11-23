@@ -1,9 +1,8 @@
 package com.fastcampus.mini9.config.security.token;
 
-import org.springframework.security.core.AuthenticatedPrincipal;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.AuthenticatedPrincipal;
 
 /**
  * AuthenticationPrincipalArgumentResolver가 바인딩한 결과로 뱉어주는 객체.

@@ -1,21 +1,5 @@
 package com.fastcampus.mini9.config.security.provider;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -29,26 +13,38 @@ import com.fastcampus.mini9.config.security.token.JwtAuthenticationToken;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtProvider implements AuthenticationProvider {
 
     private final String issuer;
-    private long accessTokenValidityInMs;
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
-
     private final RefreshTokenService refreshTokenService;
     private final long refreshTokenValidityInMs;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     private final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    private long accessTokenValidityInMs;
 
     public JwtProvider(@Value("${jwt.secret-key}") String secretKey,
-        @Value("${jwt.issuer}") String issuer,
-        @Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
-        RefreshTokenService refreshTokenService,
-        @Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
+                       @Value("${jwt.issuer}") String issuer,
+                       @Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
+                       RefreshTokenService refreshTokenService,
+                       @Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
         this.algorithm = Algorithm.HMAC256(secretKey);
         this.issuer = issuer;
         this.accessTokenValidityInMs = accessTokenValidityInMs;

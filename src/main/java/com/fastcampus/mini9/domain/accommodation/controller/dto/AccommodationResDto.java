@@ -22,7 +22,8 @@ public class AccommodationResDto {
 		private Long id;
 		private String name;
 		private AccommodationType type;
-		private LocationDto location;
+		private DistrictDto district;
+		private RegionDto region;
 		private List<accommodationImageDto> accommodationImage;
 
 		public static OriginAccommodationDto fromEntity(Accommodation accommodation) {
@@ -30,7 +31,8 @@ public class AccommodationResDto {
 				.id(accommodation.getId())
 				.name(accommodation.getName())
 				.type(accommodation.getType())
-				.location(LocationDto.fromEntity(accommodation.getLocation()))
+				.district(DistrictDto.fromEntity(accommodation.getDistrict()))
+				.region(RegionDto.fromEntity(accommodation.getRegion()))
 				.accommodationImage(
 					accommodation.getAccommodationImage().stream()
 						.map(accommodationImageDto::fromEntity)

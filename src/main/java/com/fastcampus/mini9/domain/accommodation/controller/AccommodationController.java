@@ -20,7 +20,7 @@ public class AccommodationController {
 	}
 
 	//숙소 상세정보
-	@GetMapping("/{id}")
+	@GetMapping("/{accommodationId}")
 	public ResponseEntity<OriginAccommodationDto> detailOfAccommodations(
 		@PathVariable Long accommodationId
 	) {

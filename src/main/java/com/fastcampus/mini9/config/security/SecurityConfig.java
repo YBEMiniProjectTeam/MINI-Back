@@ -86,8 +86,8 @@ public class SecurityConfig {
                 .requestMatchers(SWAGGER_PAGE).permitAll()
                 .requestMatchers("/error/**").permitAll()
 //				.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products")).permitAll()
-                .requestMatchers("/api/login").permitAll()
-                .requestMatchers("/api/sign-up").permitAll()
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/sign-up").permitAll()
                 .anyRequest().authenticated());
 
         http

@@ -10,16 +10,4 @@ import org.mapstruct.MappingConstants;
  */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AccommodationDtoMapper {
-
-	// AccommodationDtoMapper INSTANCE = Mappers.getMapper(AccommodationDtoMapper.class);
-	//
-	// AccommodationDto accommodationDto(Accommodation accommodation);
-	//
-	// AccommodationImgDto accommodationImgDto(AccommodationImage accommodationImage);
-	//
-	// LocationDto locationDto(Location location);
-	//
-	// DistrictDto districtDto(District district);
-	//
-	// RegionDto regionDto(Region region);
 }

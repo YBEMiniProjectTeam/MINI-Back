@@ -1,28 +1,14 @@
 package com.fastcampus.mini9.domain.accommodation.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.mini9.common.response.DataResponseBody;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationResDto;
-import com.fastcampus.mini9.domain.accommodation.service.AccommodationService;
 
 @RestController
-@RequestMapping("/accommodations")
 public class AccommodationController {
-
-	private final AccommodationService accommodationService;
-
-	public AccommodationController(AccommodationService accommodationService) {
-		this.accommodationService = accommodationService;
-	}
-
-	//숙소 상세정보
-
 	@GetMapping("/accommodations")
 	public DataResponseBody getAccommodations(
 		@RequestParam(required = false) String region, @RequestParam(required = false) String district,
@@ -32,11 +18,19 @@ public class AccommodationController {
 		return DataResponseBody.success(null, "SUCCESS");
 	}
 
-	@GetMapping("/{accommodationId}")
-	public ResponseEntity<AccommodationResDto> detailOfAccommodations(
-		@PathVariable Long accommodationId
-	) {
-		return accommodationService.detailOfAccommodation(accommodationId);
+	@GetMapping("/accommodations/{accommodationId}")
+	public DataResponseBody getAccommodation(@PathVariable Long accommodationId) {
+		return DataResponseBody.success(null, "SUCCESS");
 	}
 
+	@GetMapping("/accommodations/{accommodationId}/rooms")
+	public DataResponseBody getRooms(@PathVariable Long accommodationId,
+		@RequestParam String startDate, @RequestParam String endDate, @RequestParam Long guestNum) {
+		return DataResponseBody.success(null, "SUCCESS");
+	}
+
+	@GetMapping("/rooms/{roomId}")
+	public DataResponseBody getRoom(@PathVariable Long roomId) {
+		return DataResponseBody.success(null, "SUCCESS");
+	}
 }

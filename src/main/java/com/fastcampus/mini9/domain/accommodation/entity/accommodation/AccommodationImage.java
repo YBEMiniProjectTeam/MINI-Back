@@ -1,4 +1,4 @@
-package com.fastcampus.mini9.domain.accommodation.entity;
+package com.fastcampus.mini9.domain.accommodation.entity.accommodation;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class District {
+public class AccommodationImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name = "region_id")
-	private Region region;
-	private String name;
+	@JoinColumn(name = "accommodation_id")
+	private Accommodation accommodation;
+	private String url;
 }

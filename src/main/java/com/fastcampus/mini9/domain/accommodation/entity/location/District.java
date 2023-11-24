@@ -1,6 +1,4 @@
-package com.fastcampus.mini9.domain.room.entity;
-
-import java.time.LocalDate;
+package com.fastcampus.mini9.domain.accommodation.entity.location;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +13,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Stock {
+public class District {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name = "room_id")
-	private Room room;
-	private LocalDate date;
-	private Integer quantity;
+	@JoinColumn(name = "region_id")
+	private Region region;
+	private String name;
 }

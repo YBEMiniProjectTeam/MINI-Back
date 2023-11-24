@@ -1,12 +1,19 @@
 package com.fastcampus.mini9.domain.room.service;
 
+import static com.fastcampus.mini9.domain.room.controller.dto.RoomResDtoList.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
-import com.fastcampus.mini9.domain.room.controller.dto.RoomDtoMapper;
-import com.fastcampus.mini9.domain.room.controller.dto.RoomResDto;
+import com.fastcampus.mini9.domain.room.controller.dto.RoomSpecificDto;
+import com.fastcampus.mini9.domain.room.entity.Room;
+import com.fastcampus.mini9.domain.room.entity.Stock;
 import com.fastcampus.mini9.domain.room.repository.RoomRepository;
 
 @Service
@@ -20,25 +27,40 @@ public class RoomService {
 		this.accommodationRepository = accommodationRepository;
 	}
 
-	public ResponseEntity<RoomResDto> roomsInfo(Long accommodationId, String startDate, String endDate,
-		String guestNum) {
+	public ResponseEntity<List<RoomResDto>> roomsInfo(Long accommodationId, LocalDate startDate,
+		LocalDate endDate, int guestNum) {
 
-		//객실 조회시 체크인날짜, 체크아웃날짜, 객실인원에 맞는 객실 찾아야함.
+		Accommodation findByIdAccommodation = accommodationRepository.findById(accommodationId).orElseThrow();
+		List<RoomResDto> roomList = new ArrayList<>();
 
-		//문제 객실 조회할때 체크인 시간, 체크 아웃 시간 기간동안 해당 잔고 가 있는지 확인?
+		//room 체크인 체크아웃 기준으로 잔여 룸인지 확인 어떻게 해야하는가?
 
-		Accommodation findAccommodation = accommodationRepository.findById(accommodationId).orElseThrow();
+		for (Room room : findByIdAccommodation.getRooms()) {
 
-		return ResponseEntity.ok(
-			RoomDtoMapper.INSTANCE.roomResDto(
-				accommodationId,
-				startDate,
-				endDate,
-				guestNum));
+			// Room findRoom = roomRepository.findByDateBetween(startDate, endDate);
+
+			for (Stock stock : room.getStockList()) {
+
+				if (0 < stock.getQuantity() && startDate.compareTo(stock.getDate()) <= 0 && 0 <= endDate.compareTo(
+					stock.getDate())) {
+
+					int minGuestNum = room.getCapacity();
+					int maxGuestNum = room.getCapacityMax();
+
+					System.out.println((stock.getDate()));
+
+					if (minGuestNum <= guestNum && guestNum <= maxGuestNum) {
+						RoomResDto roomResDto = RoomResDto.fromEntity(room);
+						roomList.add(roomResDto);
+					}
+				}
+			}
+		}
+		return ResponseEntity.ok(roomList);
 	}
 
-	public ResponseEntity<RoomResDto> detailRoom(Long roomId) {
-
-		return ResponseEntity.ok(null);
+	public ResponseEntity<RoomSpecificDto> detailRoom(Long roomId) {
+		Room findByIdRoom = roomRepository.findById(roomId).orElseThrow();
+		return ResponseEntity.ok(RoomSpecificDto.fromEntity(findByIdRoom));
 	}
 }

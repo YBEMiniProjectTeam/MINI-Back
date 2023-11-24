@@ -1,4 +1,4 @@
-package com.fastcampus.mini9.domain.accommodation.entity;
+package com.fastcampus.mini9.domain.accommodation.entity.location;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToOne;

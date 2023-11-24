@@ -1,6 +1,6 @@
 package com.fastcampus.mini9.domain.wish.entity;
 
-import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.member.entity.Member;
 
 import jakarta.persistence.Entity;

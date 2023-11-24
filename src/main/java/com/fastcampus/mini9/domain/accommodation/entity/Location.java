@@ -1,17 +1,14 @@
 package com.fastcampus.mini9.domain.accommodation.entity;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.ManyToOne;
-import lombok.Builder;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
 @Embeddable
 @Getter
-@Builder
 public class Location {
-	@ManyToOne
+	@OneToOne
 	private Region region;
-	@ManyToOne
+	@OneToOne
 	private District district;
-
 }

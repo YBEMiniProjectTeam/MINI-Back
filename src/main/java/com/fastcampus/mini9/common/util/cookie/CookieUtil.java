@@ -1,10 +1,9 @@
 package com.fastcampus.mini9.common.util.cookie;
 
-import java.util.Optional;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 public class CookieUtil {
 
@@ -21,12 +20,30 @@ public class CookieUtil {
         return Optional.empty();
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value,
-                                 int maxAge) {
+    public static void addCookie(
+        HttpServletResponse response,
+        String name,
+        String value,
+        int maxAge
+    ) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setDomain("mwt-market.store");
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setAttribute("Samesite", "Lax");
+        cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
+    }
+
+    public static void addCookieWithoutHttp(
+        HttpServletResponse response,
+        String name,
+        String value,
+        int maxAge
+    ) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);
         cookie.setSecure(true);
         cookie.setAttribute("Samesite", "Lax");
         cookie.setMaxAge(maxAge);

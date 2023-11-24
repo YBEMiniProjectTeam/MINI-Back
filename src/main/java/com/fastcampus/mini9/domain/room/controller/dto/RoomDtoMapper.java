@@ -10,6 +10,4 @@ public interface RoomDtoMapper {
 
 	// Room fromEntity(RoomResDto roomResDto);
 
-	RoomResDto roomResDto(Long accommodationId, String startDate, String endDate,
-		String guestNum);
 }

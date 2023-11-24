@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,11 @@ public class District {
 	@JoinColumn(name = "region_id")
 	private Region region;
 	private String name;
+
+	@Builder
+	public District(Region region, String name) {
+		this.region = region;
+		this.name = name;
+	}
+
 }

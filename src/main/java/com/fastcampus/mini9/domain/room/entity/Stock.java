@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,16 @@ public class Stock {
 	private Room room;
 	private LocalDate date;
 	private Integer quantity;
+
+	@Builder
+	public Stock(
+		Room room,
+		LocalDate date,
+		Integer quantity
+	) {
+		this.room = room;
+		this.date = date;
+		this.quantity = quantity;
+
+	}
 }

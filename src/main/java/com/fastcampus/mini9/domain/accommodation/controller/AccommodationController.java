@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationResDto.OriginAccommodationDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationResDto;
 import com.fastcampus.mini9.domain.accommodation.service.AccommodationService;
 
 @RestController
@@ -21,7 +21,7 @@ public class AccommodationController {
 
 	//숙소 상세정보
 	@GetMapping("/{accommodationId}")
-	public ResponseEntity<OriginAccommodationDto> detailOfAccommodations(
+	public ResponseEntity<AccommodationResDto> detailOfAccommodations(
 		@PathVariable Long accommodationId
 	) {
 		return accommodationService.detailOfAccommodation(accommodationId);

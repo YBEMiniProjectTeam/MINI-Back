@@ -22,4 +22,17 @@ public class RoomDetails {
 	@MapsId
 	@JoinColumn(name = "room_id")
 	private Room room;
+	private boolean bathFacility;
+	private boolean bathtub;
+	private boolean homeTheater;
+	private boolean airConditioner;
+	private boolean tv;
+	private boolean pc;
+	private boolean internet;
+	private boolean refrigerator;
+	private boolean toiletries;
+	private boolean sofa;
+	private boolean cookware;
+	private boolean diningTable;
+	private boolean hairDryer;
 }

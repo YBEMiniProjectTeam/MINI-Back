@@ -1,6 +1,9 @@
 package com.fastcampus.mini9.domain.accommodation.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +37,10 @@ public class AccommodationController {
 
 	@GetMapping("/{accommodationId}")
 	public ResponseEntity<AccommodationResDto> detailOfAccommodations(
-		@PathVariable Long accommodationId
+		@PathVariable Long accommodationId,
+		@AuthenticationPrincipal Principal principal
 	) {
-		return accommodationService.detailOfAccommodation(accommodationId);
+		return accommodationService.detailOfAccommodation(accommodationId, principal.getName());
 	}
 
 }

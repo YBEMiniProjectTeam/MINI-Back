@@ -3,6 +3,7 @@ package com.fastcampus.mini9.domain.accommodation.entity;
 import java.util.List;
 
 import com.fastcampus.mini9.domain.room.entity.Room;
+import com.fastcampus.mini9.domain.wish.entity.Wish;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -36,16 +37,19 @@ public class Accommodation {
 	private List<Room> rooms;
 	@OneToOne
 	private AccommodationDetailInfo accommodationDetailInfo;
+	@OneToMany
+	private List<Wish> wishList;
 
 	@Builder
 	public Accommodation(String name, List<AccommodationImage> accommodationImage, AccommodationType type,
-		Location location, List<Room> rooms, AccommodationDetailInfo accommodationDetailInfo) {
+		Location location, List<Room> rooms, AccommodationDetailInfo accommodationDetailInfo, List<Wish> wishList) {
 		this.name = name;
 		this.accommodationImage = accommodationImage;
 		this.type = type;
 		this.location = location;
 		this.rooms = rooms;
 		this.accommodationDetailInfo = accommodationDetailInfo;
+		this.wishList = wishList;
 
 	}
 }

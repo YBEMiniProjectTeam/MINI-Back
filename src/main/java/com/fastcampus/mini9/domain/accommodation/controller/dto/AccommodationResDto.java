@@ -20,8 +20,9 @@ public class AccommodationResDto {
 	private RegionDto region;
 	private List<AccommodationImgDto> accommodationImage;
 	private AccommodationDetailInfoDto accommodationDetailInfo;
+	private Boolean isWish;
 
-	public static AccommodationResDto fromEntity(Accommodation accommodation) {
+	public static AccommodationResDto fromEntity(Accommodation accommodation, Boolean isWish) {
 		return AccommodationResDto.builder()
 			.id(accommodation.getId())
 			.name(accommodation.getName())
@@ -35,6 +36,7 @@ public class AccommodationResDto {
 			)
 			.accommodationDetailInfo(
 				AccommodationDetailInfoDto.fromEntity(accommodation.getAccommodationDetailInfo()))
+			.isWish(isWish)
 			.build();
 
 	}

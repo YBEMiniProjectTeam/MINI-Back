@@ -1,5 +1,6 @@
 package com.fastcampus.mini9.domain.accommodation.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -7,7 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
+import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationListResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomListResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +45,9 @@ public class AccommodationController {
 		@RequestParam(required = false) String region, @RequestParam(required = false) String district,
 		@RequestParam(required = false, name = "start_date") String startDate,
 		@RequestParam(required = false, name = "end_date") String endDate,
-		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword) {
+		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword,
+		@RequestParam Integer pageNum, @RequestParam Integer pageSize,
+		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		return DataResponseBody.success(null, "SUCCESS");
 	}
 
@@ -63,7 +70,7 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations/{accommodationId}")
-	public DataResponseBody getAccommodation(@PathVariable Long accommodationId) {
+	public DataResponseBody<AccommodationResDto> getAccommodation(@PathVariable Long accommodationId) {
 		return DataResponseBody.success(null, "SUCCESS");
 	}
 
@@ -86,7 +93,7 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
-	public DataResponseBody getRooms(@PathVariable Long accommodationId,
+	public DataResponseBody<RoomListResDto> getRooms(@PathVariable Long accommodationId,
 		@RequestParam String startDate, @RequestParam String endDate, @RequestParam Long guestNum) {
 		return DataResponseBody.success(null, "SUCCESS");
 	}
@@ -110,7 +117,7 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/rooms/{roomId}")
-	public DataResponseBody getRoom(@PathVariable Long roomId) {
+	public DataResponseBody<RoomResDto> getRoom(@PathVariable Long roomId) {
 		return DataResponseBody.success(null, "SUCCESS");
 	}
 }

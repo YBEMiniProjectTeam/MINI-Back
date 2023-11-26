@@ -3,6 +3,7 @@ package com.fastcampus.mini9.domain.accommodation.service;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,12 +21,23 @@ import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.entity.AccommodationDetailInfo;
 import com.fastcampus.mini9.domain.accommodation.entity.AccommodationType;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
+import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.repository.MemberRepository;
+import com.fastcampus.mini9.domain.wish.controller.dto.WishDtoMapper;
+import com.fastcampus.mini9.domain.wish.entity.Wish;
+import com.fastcampus.mini9.domain.wish.repository.WishRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AccommodationServiceTest {
 
 	@Mock
 	private AccommodationRepository accommodationRepository;
+
+	@Mock
+	private MemberRepository memberRepository;
+
+	@Mock
+	private WishRepository wishRepository;
 
 	@InjectMocks
 	private AccommodationService accommodationService;
@@ -45,28 +57,38 @@ class AccommodationServiceTest {
 			.phoneNum("123-1234-1234")
 			.build();
 
+		Member member = Member.builder()
+			.email("test@gmail.com")
+			.name("kim")
+			.pwd("123123")
+			.birthday(LocalDate.parse("2000-01-01"))
+			.build();
+
 		Accommodation accommodation = Accommodation.builder()
-			.name("test name")
+			.name("test accommodation")
 			.accommodationImage(new ArrayList<>())
 			.type(AccommodationType.HOTEL)
 			.accommodationDetailInfo(accommodationDetailInfo)
 			// .district(District.builder().name("test district").build())
 			// .region(Region.builder().name("test region").build())
-
 			.build();
+
+		Wish wish = WishDtoMapper.INSTANCE.fromWishDto(accommodation, member);
 
 		given(accommodationRepository.findById(anyLong()))
 			.willReturn(Optional.of(accommodation));
 
+		given(memberRepository.findByEmail(any()))
+			.willReturn(Optional.of(member));
+
+		given(wishRepository.existsByAccommodationAndMember(any(), any()))
+			.willReturn(true);
+
 		//when
-		ResponseEntity<AccommodationResDto> result = accommodationService.detailOfAccommodation(anyLong());
+		ResponseEntity<AccommodationResDto> result = accommodationService.detailOfAccommodation(1L, anyString());
 
 		//then
-		AccommodationResDto accommodationDtoResult = AccommodationResDto.fromEntity(accommodation);
-
-		// AccommodationDto accommodationDtoResult = AccommodationDtoMapper.INSTANCE.accommodationDto(accommodation);
-
-		System.out.println(accommodationDtoResult.getName() + "===========================");
+		AccommodationResDto accommodationDtoResult = AccommodationResDto.fromEntity(accommodation, true);
 
 		assertThat(Objects.requireNonNull(result.getBody()).getId()).isEqualTo(accommodationDtoResult.getId());
 		assertThat(result.getBody().getType()).isEqualTo(accommodationDtoResult.getType());
@@ -80,6 +102,7 @@ class AccommodationServiceTest {
 			accommodationDtoResult.getAccommodationDetailInfo().getLatitude());
 
 		assertThat(result.getBody().getAccommodationImage()).isEqualTo(accommodationDtoResult.getAccommodationImage());
+		assertThat(result.getBody().getIsWish()).isEqualTo(true);
 	}
 
 }

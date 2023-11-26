@@ -26,4 +26,9 @@ public class Wish {
 	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member member;
+
+	public Wish(Accommodation accommodation, Member member) {
+		this.accommodation = accommodation;
+		this.member = member;
+	}
 }

@@ -1,5 +1,8 @@
 package com.fastcampus.mini9.domain.accommodation.controller;
 
+import static com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery.*;
+import static com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery.*;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,19 +12,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationDtoMapper;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationListResDto;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationResDto;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomListResDto;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomResDto;
+import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
+import com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 public class AccommodationController {
+
+	private final AccommodationQuery accommodationQuery;
+	private final RoomQuery roomQuery;
+	private final AccommodationDtoMapper mapper;
+
 	@Operation(summary = "숙소 검색")
 	@ApiResponses(value = {
 		@ApiResponse(
@@ -46,9 +59,14 @@ public class AccommodationController {
 		@RequestParam(required = false, name = "start_date") String startDate,
 		@RequestParam(required = false, name = "end_date") String endDate,
 		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword,
-		@RequestParam Integer pageNum, @RequestParam Integer pageSize,
+		@RequestParam(name = "page_num") Integer pageNum, @RequestParam(name = "page_size") Integer pageSize,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		return DataResponseBody.success(null, "SUCCESS");
+		SearchAccommodationsRequest searchRequest = new SearchAccommodationsRequest(region, district, startDate,
+			endDate, category, keyword, pageNum, pageSize);
+		SearchAccommodationsResponse searchResult = accommodationQuery.searchAccommodations(searchRequest,
+			userPrincipal);
+		AccommodationListResDto result = mapper.searchResultToResponseDto(searchResult);
+		return DataResponseBody.success(result, "SUCCESS");
 	}
 
 	@Operation(summary = "숙소 상세조회")
@@ -71,7 +89,10 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations/{accommodationId}")
 	public DataResponseBody<AccommodationResDto> getAccommodation(@PathVariable Long accommodationId) {
-		return DataResponseBody.success(null, "SUCCESS");
+		FindAccommodationRequest findRequest = new FindAccommodationRequest(accommodationId);
+		FindAccommodationResponse findResult = accommodationQuery.findAccommodation(findRequest);
+		AccommodationResDto result = mapper.findResultToDto(findResult);
+		return DataResponseBody.success(result, "SUCCESS");
 	}
 
 	@Operation(summary = "숙소에서 제공하는 객실 조회")
@@ -94,8 +115,13 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
 	public DataResponseBody<RoomListResDto> getRooms(@PathVariable Long accommodationId,
-		@RequestParam String startDate, @RequestParam String endDate, @RequestParam Long guestNum) {
-		return DataResponseBody.success(null, "SUCCESS");
+		@RequestParam(name = "start_date") String startDate, @RequestParam(name = "end_date") String endDate,
+		@RequestParam(name = "guest_num") Long guestNum) {
+		FindRoomsInAccommodationRequest findRequest = new FindRoomsInAccommodationRequest(accommodationId, startDate,
+			endDate, guestNum);
+		FindRoomsInAccommodationResponse findResult = roomQuery.findRoomsInAccommodation(findRequest);
+		RoomListResDto result = mapper.findResultToDto(findResult);
+		return DataResponseBody.success(result, "SUCCESS");
 	}
 
 	@Operation(summary = "객실 상세조회")
@@ -118,6 +144,9 @@ public class AccommodationController {
 	})
 	@GetMapping("/rooms/{roomId}")
 	public DataResponseBody<RoomResDto> getRoom(@PathVariable Long roomId) {
-		return DataResponseBody.success(null, "SUCCESS");
+		FindRoomRequest findRequest = new FindRoomRequest(roomId);
+		FindRoomResponse findResult = roomQuery.findRoom(findRequest);
+		RoomResDto result = mapper.findResultToDto(findResult);
+		return DataResponseBody.success(result, "SUCCESS");
 	}
 }

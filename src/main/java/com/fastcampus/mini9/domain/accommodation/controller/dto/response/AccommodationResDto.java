@@ -6,15 +6,22 @@ public record AccommodationResDto(
 	Long id,
 	String name,
 	String type,
-	String description,
+	Description description,
 	String region,
 	String district,
-	Boolean isWish,
+	boolean isWish,
 	Long totalWishCounts,
-	List<Image> accommodation_image
+	List<String> accommodation_image
 ) {
-	private record Image(
-		String url
+	public record Description(
+		String description,
+		String address,
+		String latitude,
+		String longitude,
+		String tel,
+		boolean parking,
+		boolean cooking,
+		String others
 	) {
 
 	}

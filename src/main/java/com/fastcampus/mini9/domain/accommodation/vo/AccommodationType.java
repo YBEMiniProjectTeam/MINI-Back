@@ -1,4 +1,4 @@
-package com.fastcampus.mini9.domain.accommodation.entity.accommodation;
+package com.fastcampus.mini9.domain.accommodation.vo;
 
 import lombok.Getter;
 

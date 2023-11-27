@@ -11,8 +11,25 @@ public record RoomListResDto(
 		Integer price,
 		Integer capacity,
 		Integer capacity_max,
-		Integer stock_quantity
+		Integer stock_quantity,
+		Description description
 	) {
 
+	}
+	public record Description(
+		boolean airConditioner,
+		boolean bathFacility,
+		boolean bathtub,
+		boolean cookware,
+		boolean diningTable,
+		boolean hairDryer,
+		boolean homeTheater,
+		boolean internet,
+		boolean pc,
+		boolean refrigerator,
+		boolean sofa,
+		boolean toiletries,
+		boolean tv
+	) {
 	}
 }

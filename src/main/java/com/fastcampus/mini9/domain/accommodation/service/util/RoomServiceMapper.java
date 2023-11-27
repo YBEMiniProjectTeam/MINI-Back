@@ -16,13 +16,15 @@ public interface RoomServiceMapper {
 	List<RoomResponse> entityListToResponseList(List<Room> roomList);
 
 	// TODO: stock 조회 로직
-	@Mapping(target = "capacity_max", source = "capacityMax")
+	@Mapping(target = "capacity_max", source = "room.capacityMax")
 	@Mapping(target = "stock", constant = "2")
+	@Mapping(target = "description", source = "room.details")
 	RoomResponse entityToResponse(Room room);
 
 	// findRoom()
 	// TODO: stock 조회 로직
 	@Mapping(target = "capacity_max", source = "capacityMax")
 	@Mapping(target = "stock", constant = "2")
+	@Mapping(target = "description", source = "room.details")
 	FindRoomResponse entityToFind(Room room);
 }

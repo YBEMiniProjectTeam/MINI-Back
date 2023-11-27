@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
 import com.fastcampus.mini9.domain.member.entity.Member;
 import com.fastcampus.mini9.domain.member.repository.MemberRepository;

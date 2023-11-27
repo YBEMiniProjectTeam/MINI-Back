@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.member.entity.Member;
 import com.fastcampus.mini9.domain.wish.entity.Wish;
 

@@ -1,46 +1,53 @@
 package com.fastcampus.mini9.domain.accommodation.service;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationResDto;
-import com.fastcampus.mini9.domain.accommodation.entity.Accommodation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
-import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
+import com.fastcampus.mini9.domain.accommodation.service.util.AccommodationServiceMapper;
 import com.fastcampus.mini9.domain.member.repository.MemberRepository;
-import com.fastcampus.mini9.domain.wish.repository.WishRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-public class AccommodationService {
-
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class AccommodationService implements AccommodationQuery {
 	private final AccommodationRepository accommodationRepository;
 	private final MemberRepository memberRepository;
+	private final AccommodationServiceMapper mapper;
 
-	private final WishRepository wishRepository;
+	@Override
+	public SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest searchAccommodationsRequest,
+		UserPrincipal userPrincipal) {
+		// TODO: 검색 쿼리(QueryDSL) 구현. 이때 AccommodationDetails까지 fetch join.
+		Page<Accommodation> all = accommodationRepository.findAll(
+			PageRequest.of(searchAccommodationsRequest.pageNum(), searchAccommodationsRequest.pageSize()));
+		// TODO: 현재 로그인 상태면 검색된 accommodation에 좋아요 표시. 1안:UserPrincipal->Member. 2안:MemberService에 구현. 3안: 여기에 구현
+		// Optional<Member> loginMember = memberRepository.findById(userPrincipal.id());
+		// if(loginMember.isPresent()) {
+		// }
 
-	public AccommodationService(
-		AccommodationRepository accommodationRepository,
-		MemberRepository memberRepository,
-		WishRepository wishRepository
-	) {
-		this.accommodationRepository = accommodationRepository;
-		this.memberRepository = memberRepository;
-		this.wishRepository = wishRepository;
+		List<AccommodationResponse> accommodationResponses = mapper.entityListToResponseList(all.toList());
+		return new SearchAccommodationsResponse(accommodationResponses,
+			searchAccommodationsRequest.pageNum(), searchAccommodationsRequest.pageSize(),
+			all.getTotalPages(), all.getTotalElements(), all.isFirst(), all.isLast());
 	}
 
-	public ResponseEntity<AccommodationResDto> detailOfAccommodation(Long accommodationId, String userEmail) {
-
-		Accommodation findAccommodationById = getAccommodation(accommodationId);
-		Member member = memberRepository.findByEmail(userEmail).orElseThrow();
-		Boolean isWish = wishRepository.existsByAccommodationAndMember(findAccommodationById, member);
-
-		AccommodationResDto accommodationDto = AccommodationResDto.fromEntity(
-			findAccommodationById, isWish);
-		return ResponseEntity.ok(accommodationDto);
-	}
-
-	public Accommodation getAccommodation(Long accommodationId) {
-		return accommodationRepository.findById(accommodationId)
-			.orElseThrow(() -> new RuntimeException("해당 숙소 정보가 없습니다."));
+	@Override
+	public FindAccommodationResponse findAccommodation(
+		FindAccommodationRequest findAccommodationRequest) {
+		Accommodation findAccommodation = accommodationRepository.findById(findAccommodationRequest.id())
+			.orElseThrow();
+		FindAccommodationResponse findAccommodationResponse = mapper.entityToResponseDetail(
+			findAccommodation);
+		return findAccommodationResponse;
 	}
 }

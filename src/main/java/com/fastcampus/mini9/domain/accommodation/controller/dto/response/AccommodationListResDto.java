@@ -4,22 +4,20 @@ import java.util.List;
 
 public record AccommodationListResDto(
 	List<AccommodationResDto> accommodations,
-	Long page_num,
-	Long total_pages,
-	Long page_size,
+	Integer page_num,
+	Integer page_size,
+	Integer total_pages,
 	Long total_result,
-	Boolean first,
-	Boolean last
+	boolean first,
+	boolean last
 ) {
-	private record AccommodationResDto(
+	public record AccommodationResDto(
 		Long id,
 		String name,
 		String type,
-		String description,
-		String url,
-		Long price,
-		Boolean isWish
+		String thumbnail,
+		Integer min_price,
+		boolean isWish
 	) {
-
 	}
 }

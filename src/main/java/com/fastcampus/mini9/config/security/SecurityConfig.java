@@ -51,6 +51,15 @@ public class SecurityConfig {
         "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
         "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
     };
+    private static final String[] AUTH_REQUEST = {
+        "/sign-up"
+    };
+    private static final String[] ACCOMMODATION_GET_REQUEST = {
+        "/accommodations/**", "/rooms/**"
+    };
+    private static final String[] REGION_GET_REQUEST = {
+        "/locations/**"
+    };
     @Value("${remote-server.front.url}")
     private String frontUrl;
     @Value("${remote-server.gateway.url}")
@@ -84,10 +93,10 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(SWAGGER_PAGE).permitAll()
+                .requestMatchers(AUTH_REQUEST).permitAll()
+                .requestMatchers(ACCOMMODATION_GET_REQUEST).permitAll()
+                .requestMatchers(REGION_GET_REQUEST).permitAll()
                 .requestMatchers("/error/**").permitAll()
-//				.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/products")).permitAll()
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/sign-up").permitAll()
                 .anyRequest().authenticated());
 
         http

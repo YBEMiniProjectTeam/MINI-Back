@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         return ResponseEntity
             .badRequest()
-            .body(new ErrorResponseBody(false, 400, errorMessage, ex));
+            .body(new ErrorResponseBody(false, 400, errorMessage));
     }
 
     @ExceptionHandler(BaseException.class)
@@ -30,6 +30,6 @@ public class GlobalExceptionHandler {
         logger.error("error occur!", ex);
         return ResponseEntity
             .internalServerError()
-            .body(new ErrorResponseBody(false, 500, ex.getMessage(), ex));
+            .body(new ErrorResponseBody(false, 500, ex.getMessage()));
     }
 }

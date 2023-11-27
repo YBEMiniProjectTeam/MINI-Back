@@ -15,6 +15,8 @@ public record GetAccommodationsResponse(
 		Long id,
 		String name,
 		String type,
+		String region,
+		String district,
 		String thumbnail,
 		Integer min_price,
 		boolean isWish

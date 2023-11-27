@@ -13,10 +13,10 @@ import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationDtoMapper;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationListResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomListResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomResponse;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery;
 
@@ -39,8 +39,7 @@ public class AccommodationController {
 	@ApiResponses(value = {
 		@ApiResponse(
 			description = "정상적으로 호출했을 때",
-			responseCode = "200",
-			useReturnTypeSchema = true
+			responseCode = "200"
 		),
 		@ApiResponse(
 			description = "잘못된 형식으로 요청했을 때",
@@ -54,7 +53,7 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations")
-	public DataResponseBody<AccommodationListResDto> getAccommodations(
+	public DataResponseBody<GetAccommodationsResponse> getAccommodations(
 		@RequestParam(required = false) String region, @RequestParam(required = false) String district,
 		@RequestParam(required = false, name = "start_date") String startDate,
 		@RequestParam(required = false, name = "end_date") String endDate,
@@ -65,7 +64,7 @@ public class AccommodationController {
 			endDate, category, keyword, pageNum, pageSize);
 		SearchAccommodationsResponse searchResult = accommodationQuery.searchAccommodations(searchRequest,
 			userPrincipal);
-		AccommodationListResDto result = mapper.searchResultToResponseDto(searchResult);
+		GetAccommodationsResponse result = mapper.searchResultToResponseDto(searchResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 
@@ -73,8 +72,7 @@ public class AccommodationController {
 	@ApiResponses(value = {
 		@ApiResponse(
 			description = "정상적으로 호출했을 때",
-			responseCode = "200",
-			useReturnTypeSchema = true
+			responseCode = "200"
 		),
 		@ApiResponse(
 			description = "잘못된 형식으로 요청했을 때",
@@ -88,10 +86,10 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations/{accommodationId}")
-	public DataResponseBody<AccommodationResDto> getAccommodation(@PathVariable Long accommodationId) {
+	public DataResponseBody<GetAccommodationResponse> getAccommodation(@PathVariable Long accommodationId) {
 		FindAccommodationRequest findRequest = new FindAccommodationRequest(accommodationId);
-		FindAccommodationResponse findResult = accommodationQuery.findAccommodation(findRequest);
-		AccommodationResDto result = mapper.findResultToDto(findResult);
+		AccommodationQuery.FindAccommodationResponse findResult = accommodationQuery.findAccommodation(findRequest);
+		GetAccommodationResponse result = mapper.findResultToDto(findResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 
@@ -99,8 +97,7 @@ public class AccommodationController {
 	@ApiResponses(value = {
 		@ApiResponse(
 			description = "정상적으로 호출했을 때",
-			responseCode = "200",
-			useReturnTypeSchema = true
+			responseCode = "200"
 		),
 		@ApiResponse(
 			description = "잘못된 형식으로 요청했을 때",
@@ -114,13 +111,13 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
-	public DataResponseBody<RoomListResDto> getRooms(@PathVariable Long accommodationId,
+	public DataResponseBody<GetRoomsResponse> getRooms(@PathVariable Long accommodationId,
 		@RequestParam(name = "start_date") String startDate, @RequestParam(name = "end_date") String endDate,
 		@RequestParam(name = "guest_num") Long guestNum) {
 		FindRoomsInAccommodationRequest findRequest = new FindRoomsInAccommodationRequest(accommodationId, startDate,
 			endDate, guestNum);
 		FindRoomsInAccommodationResponse findResult = roomQuery.findRoomsInAccommodation(findRequest);
-		RoomListResDto result = mapper.findResultToDto(findResult);
+		GetRoomsResponse result = mapper.findResultToDto(findResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 
@@ -128,8 +125,7 @@ public class AccommodationController {
 	@ApiResponses(value = {
 		@ApiResponse(
 			description = "정상적으로 호출했을 때",
-			responseCode = "200",
-			useReturnTypeSchema = true
+			responseCode = "200"
 		),
 		@ApiResponse(
 			description = "잘못된 형식으로 요청했을 때",
@@ -143,10 +139,10 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/rooms/{roomId}")
-	public DataResponseBody<RoomResDto> getRoom(@PathVariable Long roomId) {
+	public DataResponseBody<GetRoomResponse> getRoom(@PathVariable Long roomId) {
 		FindRoomRequest findRequest = new FindRoomRequest(roomId);
 		FindRoomResponse findResult = roomQuery.findRoom(findRequest);
-		RoomResDto result = mapper.findResultToDto(findResult);
+		GetRoomResponse result = mapper.findResultToDto(findResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 }

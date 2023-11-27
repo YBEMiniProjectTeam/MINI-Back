@@ -2,18 +2,18 @@ package com.fastcampus.mini9.domain.accommodation.controller.dto.response;
 
 import java.util.List;
 
-public record AccommodationResDto(
+public record GetAccommodationResponse(
 	Long id,
 	String name,
 	String type,
-	Description description,
+	GetAccommodationDescription description,
 	String region,
 	String district,
 	boolean isWish,
 	Long totalWishCounts,
 	List<String> accommodation_image
 ) {
-	public record Description(
+	public record GetAccommodationDescription(
 		String description,
 		String address,
 		String latitude,

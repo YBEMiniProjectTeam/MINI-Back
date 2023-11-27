@@ -9,10 +9,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationListResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.AccommodationResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomListResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
 
 /**
  * 사용방법
@@ -23,30 +23,30 @@ import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RoomRes
 public interface AccommodationDtoMapper {
 	// getAccommodations()
 	@Mapping(target = "accommodations", source = "accommodationResponses")
-	AccommodationListResDto searchResultToResponseDto(SearchAccommodationsResponse searchResult);
+	GetAccommodationsResponse searchResultToResponseDto(SearchAccommodationsResponse searchResult);
 
-	List<AccommodationListResDto.AccommodationResDto> searchResultToResponseDto(
-		List<AccommodationResponse> accommodationResponses);
+	List<GetAccommodationsResponse.GetAccommodation> searchResultToResponseDto(
+		List<SearchAccommodation> accommodationResponses);
 
 	// TODO: @Mapping(target = "min_price", source = "?")
-	AccommodationListResDto.AccommodationResDto accommodationResponseToResDto(
-		AccommodationResponse accommodationResponse);
+	GetAccommodationsResponse.GetAccommodation accommodationResponseToResDto(
+		SearchAccommodation accommodationResponse);
 
 	// getAccommodation()
 	// TODO: WishCount 기능 구현 후 제거
 	@Mapping(target = "totalWishCounts", constant = "10L")
-	AccommodationResDto findResultToDto(FindAccommodationResponse findResult);
+	GetAccommodationResponse findResultToDto(FindAccommodationResponse findResult);
 
 	// getRooms()
 	@Mapping(target = "rooms", source = "roomResponses")
-	RoomListResDto findResultToDto(FindRoomsInAccommodationResponse findResult);
+	GetRoomsResponse findResultToDto(FindRoomsInAccommodationResponse findResult);
 
-	List<RoomListResDto.RoomResDto> findResultToDto(List<RoomResponse> findResult);
+	List<GetRoomsResponse.GetRoom> findResultToDto(List<RoomResponse> findResult);
 
 	@Mapping(target = "stock_quantity", source = "stock")
-	RoomListResDto.RoomResDto findResultToDto(RoomResponse findResult);
+	GetRoomsResponse.GetRoom findResultToDto(RoomResponse findResult);
 
 	// getRoom()
-	RoomResDto findResultToDto(FindRoomResponse findResult);
+	GetRoomResponse findResultToDto(FindRoomResponse findResult);
 }
 

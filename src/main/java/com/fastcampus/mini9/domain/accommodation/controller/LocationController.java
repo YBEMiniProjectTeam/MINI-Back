@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.DistrictListResDto;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.RegionListResDto;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetDistrictsResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRegionsResponse;
 import com.fastcampus.mini9.domain.accommodation.entity.location.District;
 import com.fastcampus.mini9.domain.accommodation.entity.location.Region;
 import com.fastcampus.mini9.domain.accommodation.repository.RegionRepository;
@@ -46,12 +46,12 @@ public class LocationController {
 		)
 	})
 	@GetMapping("/locations/regions")
-	public DataResponseBody<RegionListResDto> getRegions() {
+	public DataResponseBody<GetRegionsResponse> getRegions() {
 		List<Region> regions = regionRepository.findAll();
-		List<RegionListResDto.RegionResDto> collect = regions.stream()
-			.map(RegionListResDto.RegionResDto::fromEntity)
+		List<GetRegionsResponse.GetRegion> collect = regions.stream()
+			.map(GetRegionsResponse.GetRegion::fromEntity)
 			.collect(Collectors.toList());
-		RegionListResDto result = new RegionListResDto(collect);
+		GetRegionsResponse result = new GetRegionsResponse(collect);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 
@@ -74,13 +74,13 @@ public class LocationController {
 		)
 	})
 	@GetMapping("/locations/regions/{regionId}/districts")
-	public DataResponseBody<DistrictListResDto> getDistricts(@PathVariable Long regionId) {
+	public DataResponseBody<GetDistrictsResponse> getDistricts(@PathVariable Long regionId) {
 		Region region = regionRepository.findById(regionId).orElseThrow();
 		List<District> districts = region.getDistricts();
-		List<DistrictListResDto.DistrictResDto> collect = districts.stream()
-			.map(DistrictListResDto.DistrictResDto::fromEntity)
+		List<GetDistrictsResponse.GetDistrict> collect = districts.stream()
+			.map(GetDistrictsResponse.GetDistrict::fromEntity)
 			.collect(Collectors.toList());
-		DistrictListResDto result = new DistrictListResDto(collect);
+		GetDistrictsResponse result = new GetDistrictsResponse(collect);
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 }

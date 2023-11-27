@@ -1,14 +1,14 @@
 package com.fastcampus.mini9.domain.accommodation.controller.dto.response;
 
-public record RoomResDto(
+public record GetRoomResponse(
 	Long id,
 	String name,
 	Integer price,
 	Integer capacity,
 	Integer capacity_max,
-	Description description
+	GetRoomDescription description
 ) {
-	public record Description(
+	public record GetRoomDescription(
 		boolean airConditioner,
 		boolean bathFacility,
 		boolean bathtub,

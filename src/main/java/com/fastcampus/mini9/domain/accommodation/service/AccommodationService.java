@@ -35,7 +35,7 @@ public class AccommodationService implements AccommodationQuery {
 		// if(loginMember.isPresent()) {
 		// }
 
-		List<AccommodationResponse> accommodationResponses = mapper.entityListToResponseList(all.toList());
+		List<SearchAccommodation> accommodationResponses = mapper.entityListToResponseList(all.toList());
 		return new SearchAccommodationsResponse(accommodationResponses,
 			searchAccommodationsRequest.pageNum(), searchAccommodationsRequest.pageSize(),
 			all.getTotalPages(), all.getTotalElements(), all.isFirst(), all.isLast());

@@ -23,7 +23,7 @@ public interface AccommodationQuery {
 	}
 
 	record SearchAccommodationsResponse(
-		List<AccommodationResponse> accommodationResponses,
+		List<SearchAccommodation> accommodationResponses,
 		Integer page_num,
 		Integer page_size,
 		Integer total_pages,
@@ -33,7 +33,7 @@ public interface AccommodationQuery {
 	) {
 	}
 
-	record AccommodationResponse(
+	record SearchAccommodation(
 		Long id,
 		String name,
 		AccommodationType type,
@@ -56,7 +56,7 @@ public interface AccommodationQuery {
 		Long id,
 		String name,
 		AccommodationType type,
-		Description description,
+		FindAccommodationDescription description,
 		String region,
 		String district,
 		String checkIn,
@@ -67,7 +67,7 @@ public interface AccommodationQuery {
 	) {
 	}
 
-	record Description(
+	record FindAccommodationDescription(
 		String description,
 		String address,
 		String latitude,

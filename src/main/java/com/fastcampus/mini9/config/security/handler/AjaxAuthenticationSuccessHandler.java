@@ -6,13 +6,12 @@ import com.fastcampus.mini9.config.security.provider.JwtProvider;
 import com.fastcampus.mini9.config.security.service.RefreshTokenService;
 import com.fastcampus.mini9.config.security.token.AuthenticationDetails;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.member.controller.dto.response.LoginResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -51,8 +50,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        Map<String, String> tokenData = new HashMap<>();
-        tokenData.put("access_token", accessToken);
-        objectMapper.writeValue(response.getWriter(), DataResponseBody.success(tokenData));
+        objectMapper.writeValue(response.getWriter(),
+            DataResponseBody.success(new LoginResponseDto(accessToken)));
     }
 }

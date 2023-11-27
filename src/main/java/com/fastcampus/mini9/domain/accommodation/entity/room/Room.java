@@ -7,6 +7,7 @@ import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodat
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "accommodation_id")
 	private Accommodation accommodation;
 	@OneToOne(mappedBy = "room", cascade = CascadeType.ALL)

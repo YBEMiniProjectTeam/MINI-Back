@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.fastcampus.mini9.domain.accommodation.entity.location.Region;
 
-public record RegionListResDto(
-	List<RegionResDto> regions
+public record GetRegionsResponse(
+	List<GetRegion> regions
 ) {
-	public record RegionResDto(
+	public record GetRegion(
 		Long id,
 		String name
 	) {
-		public static RegionResDto fromEntity(Region region) {
-			return new RegionResDto(region.getId(), region.getName());
+		public static GetRegion fromEntity(Region region) {
+			return new GetRegion(region.getId(), region.getName());
 		}
 	}
 }

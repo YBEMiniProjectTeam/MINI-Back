@@ -14,14 +14,14 @@ import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodat
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AccommodationServiceMapper {
 	// searchAccommodations()
-	List<AccommodationResponse> entityListToResponseList(List<Accommodation> accommodationList);
+	List<SearchAccommodation> entityListToResponseList(List<Accommodation> accommodationList);
 
 	@Mapping(target = "region", source = "accommodation.location.region.name")
 	@Mapping(target = "district", source = "accommodation.location.district.name")
 	@Mapping(target = "thumbnail", source = "accommodation.thumbnail")
 	@Mapping(target = "min_price", source = "accommodation.minPrice")
 		// TODO: @Mapping(target = "isWish, source = "?")
-	AccommodationResponse entityToResponse(Accommodation accommodation);
+	SearchAccommodation entityToResponse(Accommodation accommodation);
 
 	// findAccommodation()
 	@Mapping(target = "region", source = "accommodation.location.region.name")
@@ -32,5 +32,5 @@ public interface AccommodationServiceMapper {
 	@Mapping(target = "accommodation_image", source = "accommodation.imagesAsString")
 	FindAccommodationResponse entityToResponseDetail(Accommodation accommodation);
 
-	Description entityToDescription(AccommodationDetails details);
+	FindAccommodationDescription entityToDescription(AccommodationDetails details);
 }

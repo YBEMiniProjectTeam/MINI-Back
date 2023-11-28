@@ -1,6 +1,10 @@
 package com.fastcampus.mini9.domain.member.entity;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fastcampus.mini9.domain.wish.entity.Wish;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +40,9 @@ public class Member {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Cart> carts = new ArrayList<>();
+  
+  @OneToMany(mappedBy = "member")
+	private List<Wish> wishList;
 
 	@Builder
 	private Member(String email, String pwd, String name, LocalDate birthday) {

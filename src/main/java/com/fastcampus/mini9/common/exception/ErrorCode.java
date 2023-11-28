@@ -15,13 +15,15 @@ public enum ErrorCode {
     InvalidImageType(400, "유효하지 않은 이미지 형식입니다"),
     ExistsArgument(400, "이미 존재합니다"),
     NotFoundMember(400, "회원을 찾을 수 없습니다"),
+    AlreadyWish(400, "위시리스트에 이미 등록되었습니다."),
+	  NoExistWish(400, "위시리스트에 등록되지 않은 숙소입니다.");
     ;
 
-    private final Integer code;
-    private final String msg;
+	private final Integer code;
+	private final String msg;
 
-    ErrorCode(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
+	ErrorCode(Integer code, String msg) {
+		this.code = code;
+		this.msg = msg;
+	}
 }

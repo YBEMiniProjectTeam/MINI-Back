@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,4 +27,10 @@ public class Wish {
 	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member member;
+
+	public Wish(@NonNull Accommodation accommodation, @NonNull Member member) {
+		this.accommodation = accommodation;
+		this.member = member;
+		member.getWishList().add(this);
+	}
 }

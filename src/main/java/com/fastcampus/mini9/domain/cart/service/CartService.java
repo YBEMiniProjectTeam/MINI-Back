@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.repository.RoomRepository;
 import com.fastcampus.mini9.domain.cart.dto.CartIdRequest;
@@ -49,8 +50,11 @@ public class CartService {
 	}
 
 	private FindCartResponse mapToFindCartResponse(List<Cart> carts) {
+		Accommodation accommodation = carts.get(0).getRoom().getAccommodation();
+
 		return new FindCartResponse(
-			carts.get(0).getRoom().getAccommodation().getName(),
+			accommodation.getName(),
+			accommodation.getDetails().getAddress(), // 숙소 주소
 			carts.stream()
 				.map(cart -> {
 					Room room = cart.getRoom();
@@ -58,7 +62,6 @@ public class CartService {
 					return new FindCartResponse.RoomInfo(
 						cart.getId(), // 장바구니 ID
 						cart.getQuantity(), // 수량
-						room.getAccommodation().getDetails().getAddress(), // 숙소 주소
 						room.getName(), // 객실명
 						room.getAccommodation().getThumbnail(), // 숙소 썸네일 url
 						room.getPrice(), // 객실 가격

@@ -16,12 +16,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Stock {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne
 	@JoinColumn(name = "room_id")
 	private Room room;
+
 	private LocalDate date;
-	private Integer quantity;
+
+	private int quantity;
 }

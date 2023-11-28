@@ -12,8 +12,6 @@ import com.fastcampus.mini9.domain.wish.entity.Wish;
 public interface WishDtoMapper {
 	WishDtoMapper INSTANCE = Mappers.getMapper(WishDtoMapper.class);
 
-	WishDto toWishDto(Wish wish);
-
 	Wish fromWishDto(Accommodation accommodation, Member member);
 
 }

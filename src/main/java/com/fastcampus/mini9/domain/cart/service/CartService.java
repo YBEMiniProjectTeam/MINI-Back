@@ -52,18 +52,24 @@ public class CartService {
 		return new FindCartResponse(
 			carts.get(0).getRoom().getAccommodation().getName(),
 			carts.stream()
-				.map(cart -> new FindCartResponse.RoomInfo(
-					cart.getId(), // 장바구니 ID
-					cart.getQuantity(), // 수량
-					cart.getRoom().getAccommodation().getDetails().getAddress(), // 숙소 주소
-					cart.getRoom().getName(), // 객실명
-					cart.getRoom().getAccommodation().getThumbnail(), // 숙소 썸네일 url
-					cart.getRoom().getPrice(), // 객실 가격
-					cart.getRoom().getCheckIn(), // 체크인 시간
-					cart.getRoom().getCheckOut(), // 체크아웃 시간
-					cart.getRoom().getCapacity(), // 기준 인원
-					cart.getRoom().getCapacityMax() // 최대 인원
-				)).collect(Collectors.toList())
+				.map(cart -> {
+					Room room = cart.getRoom();
+
+					return new FindCartResponse.RoomInfo(
+						cart.getId(), // 장바구니 ID
+						cart.getQuantity(), // 수량
+						room.getAccommodation().getDetails().getAddress(), // 숙소 주소
+						room.getName(), // 객실명
+						room.getAccommodation().getThumbnail(), // 숙소 썸네일 url
+						room.getPrice(), // 객실 가격
+						cart.getCheckInDate(), // 체크인 날짜
+						cart.getCheckOutDate(), // 체크아웃 날짜
+						room.getCheckIn(), // 체크인 시간
+						room.getCheckOut(), // 체크아웃 시간
+						room.getCapacity(), // 기준 인원
+						room.getCapacityMax() // 최대 인원
+					);
+				}).collect(Collectors.toList())
 		);
 	}
 

@@ -8,7 +8,6 @@ import org.hibernate.annotations.BatchSize;
 import com.fastcampus.mini9.domain.accommodation.entity.location.Location;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
-import com.fastcampus.mini9.domain.wish.entity.Wish;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
@@ -48,8 +47,6 @@ public class Accommodation {
 	@OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
 	@BatchSize(size = 20)
 	private List<Room> rooms;
-	@OneToMany
-	private List<Wish> wishList;
 
 	// TODO: 이미지 업로드 후 첫번째 사진 로드 혹은 default 이미지
 	public String getThumbnail() {

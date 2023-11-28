@@ -27,7 +27,7 @@ public class Member {
 	private String pwd;
 	private String name;
 	private LocalDate birthday;
-	@OneToMany
+	@OneToMany(mappedBy = "member")
 	private List<Wish> wishList;
 
 	@Builder

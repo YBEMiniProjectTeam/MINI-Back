@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.fastcampus.mini9.domain.wish.entity.Wish;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fastcampus.mini9.domain.cart.entity.Cart;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,19 +29,26 @@ public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private String email;
+
 	private String pwd;
+
 	private String name;
+
 	private LocalDate birthday;
-	@OneToMany(mappedBy = "member")
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Cart> carts = new ArrayList<>();
+  
+  @OneToMany(mappedBy = "member")
 	private List<Wish> wishList;
 
 	@Builder
-	private Member(String email, String pwd, String name, LocalDate birthday, List<Wish> wishList) {
+	private Member(String email, String pwd, String name, LocalDate birthday) {
 		this.email = email;
 		this.pwd = pwd;
 		this.name = name;
 		this.birthday = birthday;
-		this.wishList = wishList;
 	}
 }

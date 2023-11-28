@@ -3,10 +3,12 @@ package com.fastcampus.mini9.domain.member.controller;
 import com.fastcampus.mini9.common.response.BaseResponseBody;
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
+import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fastcampus.mini9.domain.member.controller.dto.MemberDtoMapper;
 import com.fastcampus.mini9.domain.member.controller.dto.request.LoginRequestDto;
 import com.fastcampus.mini9.domain.member.controller.dto.request.SignupRequestDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.LoginResponseDto;
+import com.fastcampus.mini9.domain.member.controller.dto.response.MemberInfoResponseDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberSaveResponseDto;
 import com.fastcampus.mini9.domain.member.service.MemberService;
 import com.fastcampus.mini9.domain.member.service.dto.response.MemberDto;
@@ -17,6 +19,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,5 +104,31 @@ public class MemberController {
     @PostMapping("/logout")
     public BaseResponseBody logout() {
         throw new RuntimeException("Logout Controller");
+    }
+
+    @Operation(summary = "회원 정보")
+    @ApiResponses(value = {
+        @ApiResponse(
+            description = "정상적으로 호출했을 때",
+            responseCode = "200",
+            useReturnTypeSchema = true
+        ),
+        @ApiResponse(
+            description = "잘못된 형식으로 요청했을 때",
+            responseCode = "400",
+            content = {@Content(schema = @Schema(implementation = ErrorResponseBody.class))}
+        ),
+        @ApiResponse(
+            description = "서버 에러",
+            responseCode = "500",
+            content = {@Content(schema = @Schema(implementation = ErrorResponseBody.class))}
+        )
+    })
+    @GetMapping("/member-info")
+    public DataResponseBody<MemberInfoResponseDto> memberInfo(
+        @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        MemberDto response = memberService.getProfile(principal.getName());
+        return DataResponseBody.success(mapper.memberToMemberInfoResponse(response));
     }
 }

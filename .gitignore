@@ -25,6 +25,11 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.gradle
+**/.idea/**
+**/build/**
+/src/main/generated/**/*MapperImpl.java
+*/out/**
 
 ### NetBeans ###
 /nbproject/private/

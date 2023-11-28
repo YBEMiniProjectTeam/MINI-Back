@@ -1,21 +1,16 @@
-package com.fastcampus.mini9.domain.payment.entity;
+package com.fastcampus.mini9.domain.cart.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.member.entity.Member;
-import com.fastcampus.mini9.domain.reservation.entity.Reservation;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,22 +18,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
-@Getter
-public class Payment {
+public class Cart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private LocalDateTime payAt;
+	private LocalDate checkInDate;
 
-	private Integer price;
+	private LocalDate checkOutDate;
 
-	@Enumerated(EnumType.STRING)
-	private PaymentStatus status;
+	@Builder.Default
+	private int quantity = 1;
 
 	@ManyToOne
 	@JoinColumn(name = "member_id")
@@ -48,11 +43,11 @@ public class Payment {
 	@JoinColumn(name = "room_id")
 	private Room room;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reservation_id")
-	private Reservation reservation;
+	public void increaseQuantity() {
+		this.quantity += 1;
+	}
 
-	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
+	public void decreaseQuantity() {
+		this.quantity -= 1;
 	}
 }

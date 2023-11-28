@@ -1,5 +1,6 @@
 package com.fastcampus.mini9.domain.cart.dto;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,11 +34,17 @@ public record FindCartResponse(
 		@Schema(example = "50000")
 		int price,
 
+		@Schema(example = "2023-11-11")
+		LocalDate checkInDate,
+
+		@Schema(example = "2023-11-15")
+		LocalDate checkOutDate,
+
 		@Schema(example = "15:00")
-		LocalTime checkIn,
+		LocalTime checkInTime,
 
 		@Schema(example = "11:00")
-		LocalTime checkOut,
+		LocalTime checkOutTime,
 
 		@Schema(example = "2")
 		int capacity,
@@ -45,12 +52,12 @@ public record FindCartResponse(
 		@Schema(example = "4")
 		int capacityMax) {
 
-		public String getCheckIn() {
-			return checkIn.format(DateTimeFormatter.ofPattern("HH:mm"));
+		public String getCheckInTime() {
+			return checkInTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 		}
 
-		public String getCheckOut() {
-			return checkOut.format(DateTimeFormatter.ofPattern("HH:mm"));
+		public String getCheckOutTime() {
+			return checkOutTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 		}
 	}
 }

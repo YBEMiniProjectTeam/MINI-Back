@@ -1,6 +1,7 @@
 package com.fastcampus.mini9.domain.member.controller.dto;
 
 import com.fastcampus.mini9.domain.member.controller.dto.request.SignupRequestDto;
+import com.fastcampus.mini9.domain.member.controller.dto.response.MemberInfoResponseDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberSaveResponseDto;
 import com.fastcampus.mini9.domain.member.service.dto.request.MemberSaveDto;
 import com.fastcampus.mini9.domain.member.service.dto.response.MemberDto;
@@ -19,4 +20,6 @@ public interface MemberDtoMapper {
     MemberSaveDto signupTomMemberSave(SignupRequestDto dto);
 
     MemberSaveResponseDto memberToMemberSaveResponse(MemberDto dto);
+
+    MemberInfoResponseDto memberToMemberInfoResponse(MemberDto dto);
 }

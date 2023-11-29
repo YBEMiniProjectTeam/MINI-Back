@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
@@ -23,6 +24,8 @@ public class AccommodationDetails {
 	@JoinColumn(name = "accommodation_id")
 	private Accommodation accommodation;
 
+	@Lob
+	@Column(columnDefinition = "TEXT")
 	private String description;
 	private String address;
 	private String latitude;

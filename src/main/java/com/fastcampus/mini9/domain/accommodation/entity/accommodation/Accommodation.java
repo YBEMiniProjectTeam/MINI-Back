@@ -1,10 +1,11 @@
 package com.fastcampus.mini9.domain.accommodation.entity.accommodation;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
 import java.util.stream.Collectors;
+
 import org.hibernate.annotations.BatchSize;
 
 import com.fastcampus.mini9.domain.accommodation.entity.location.Location;
@@ -12,7 +13,6 @@ import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +20,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -45,9 +44,9 @@ public class Accommodation {
 	@Embedded
 	private Location location;
 
-	private String checkIn;
+	private LocalTime checkIn;
 
-	private String checkOut;
+	private LocalTime checkOut;
 
 	@OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -80,8 +79,4 @@ public class Accommodation {
 	public Integer getMinPrice() {
 		return rooms.stream().map(Room::getPrice).min(Comparator.naturalOrder()).orElse(0);
 	}
-
-	@Lob
-	@Column(columnDefinition = "TEXT")
-	private String description;
 }

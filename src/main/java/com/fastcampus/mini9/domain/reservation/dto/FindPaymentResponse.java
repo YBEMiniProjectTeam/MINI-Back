@@ -3,14 +3,21 @@ package com.fastcampus.mini9.domain.reservation.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record FindReservationResponse(
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
+public record FindPaymentResponse(
+
+	@Schema(example = "박경탁 (예약자명)")
+	String reservationName,
 
 	@Schema(example = "조선 호텔 (숙소명)")
 	String accommodationName,
 
-	FindReservationResponse.RoomInfo roomInfo) {
+	FindPaymentResponse.RoomInfo roomInfo) {
 
 	public record RoomInfo(
 

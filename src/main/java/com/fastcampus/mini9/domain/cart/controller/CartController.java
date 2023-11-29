@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.mini9.common.response.BaseResponseBody;
@@ -20,7 +21,7 @@ import com.fastcampus.mini9.domain.cart.dto.CreateCartRequest;
 import com.fastcampus.mini9.domain.cart.dto.CreateOrderRequest;
 import com.fastcampus.mini9.domain.cart.dto.FindCartResponse;
 import com.fastcampus.mini9.domain.cart.service.CartService;
-import com.fastcampus.mini9.domain.reservation.dto.FindReservationResponse;
+import com.fastcampus.mini9.domain.reservation.dto.FindPaymentResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -79,10 +80,18 @@ public class CartController {
 
 	@Operation(summary = "결제하기 버튼")
 	@PostMapping("/orders/payments")
-	public DataResponseBody<List<FindReservationResponse>> createOrders(
+	public BaseResponseBody createOrders(
 		@RequestBody CreateOrderRequest createOrderRequest,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		return DataResponseBody.success(cartService.createOrder(createOrderRequest, userPrincipal.id()), "SUCCESS");
+		cartService.createOrder(createOrderRequest, userPrincipal.id());
+
+		return DataResponseBody.success();
 	}
 
+	@Operation(summary = "결제하기 버튼 클릭 후 예약, 결제 내역 조회")
+	@GetMapping("/orders/payments")
+	public DataResponseBody<List<FindPaymentResponse>> findRecentOrders(
+		@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam int count) {
+		return DataResponseBody.success(cartService.findRecentOrders(userPrincipal.id(), count), "SUCCESS");
+	}
 }

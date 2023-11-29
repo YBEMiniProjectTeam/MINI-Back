@@ -1,5 +1,7 @@
 package com.fastcampus.mini9.domain.accommodation.vo;
 
+import com.fastcampus.mini9.common.exception.ErrorCode;
+import com.fastcampus.mini9.domain.accommodation.exception.NoSuchAccommodationType;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +14,24 @@ public enum AccommodationType {
 	AccommodationType(String korName, String engName) {
 		this.korName = korName;
 		this.engName = engName;
+	}
+
+	public static AccommodationType getTypeKor(String korName) throws NoSuchAccommodationType {
+		for (AccommodationType type : AccommodationType.values()) {
+			if(type.getKorName().equals(korName)) {
+				return type;
+			}
+		}
+		throw new NoSuchAccommodationType(ErrorCode.NoSuchElement);
+	}
+
+	public static AccommodationType getTypeEng(String engName) throws NoSuchAccommodationType {
+		for (AccommodationType type : AccommodationType.values()) {
+			if(type.getEngName().equals(engName)) {
+				return type;
+			}
+		}
+		throw new NoSuchAccommodationType(ErrorCode.NoSuchElement);
 	}
 
 	@Override

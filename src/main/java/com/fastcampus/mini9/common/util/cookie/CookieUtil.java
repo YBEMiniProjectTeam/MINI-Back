@@ -27,6 +27,7 @@ public class CookieUtil {
         int maxAge
     ) {
         Cookie cookie = new Cookie(name, value);
+        cookie.setDomain("anti-bias.kr");
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
@@ -42,6 +43,7 @@ public class CookieUtil {
         int maxAge
     ) {
         Cookie cookie = new Cookie(name, value);
+        cookie.setDomain("anti-bias.kr");
         cookie.setPath("/");
         cookie.setHttpOnly(false);
         cookie.setSecure(true);

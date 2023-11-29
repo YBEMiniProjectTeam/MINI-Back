@@ -18,13 +18,14 @@ public class StockScheduler {
     @Async
     @PostConstruct
     public void initStock() {
-        stockService.createStocks(LocalDate.now(), LocalDate.now().plusMonths(INIT_MONTH));
+        stockService.createStocks(LocalDate.now(), LocalDate.now().plusDays(1));
     }
 
     @Async
     @Scheduled(cron = "0 0 0 * * *")
     public void dailyStock() {
-        stockService.createStocks(LocalDate.now().plusMonths(INIT_MONTH));
+        LocalDate startDate = LocalDate.now().plusMonths(INIT_MONTH);
+        stockService.createStocks(startDate);
         stockService.deleteBeforeStock(LocalDate.now());
     }
 }

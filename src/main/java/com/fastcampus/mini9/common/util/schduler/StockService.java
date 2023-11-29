@@ -23,34 +23,44 @@ public class StockService {
     @Async
     public void createStocks(LocalDate startDate, LocalDate endDate) {
         List<Room> rooms = roomRepository.findAll();
-        for (Room room : rooms) {
+        rooms.parallelStream().forEach(room -> {
             for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                Stock stock = Stock.builder()
-                    .room(room)
-                    .date(date)
-                    .quantity(room.getNumberOfRoom())
-                    .build();
-                stockRepository.save(stock);
+                createStockForDateWithoutExistsCheck(room, date);
             }
-        }
+        });
     }
 
     @Async
     public void createStocks(LocalDate startDate) {
         LocalDate endDate = startDate.plusDays(1);
         List<Room> rooms = roomRepository.findAll();
-        for (Room room : rooms) {
+        rooms.parallelStream().forEach(room -> {
             for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                if (!stockExists(room, date)) {
-                    Stock stock = Stock.builder()
-                        .room(room)
-                        .date(date)
-                        .quantity(room.getNumberOfRoom())
-                        .build();
-                    stockRepository.save(stock);
-                }
+                createStockForDate(room, date);
             }
+        });
+    }
+
+    @Async
+    public void createStockForDate(Room room, LocalDate date) {
+        if (!stockExists(room, date)) {
+            Stock stock = Stock.builder()
+                .room(room)
+                .date(date)
+                .quantity(room.getNumberOfRoom())
+                .build();
+            stockRepository.save(stock);
         }
+    }
+
+    @Async
+    public void createStockForDateWithoutExistsCheck(Room room, LocalDate date) {
+        Stock stock = Stock.builder()
+            .room(room)
+            .date(date)
+            .quantity(room.getNumberOfRoom())
+            .build();
+        stockRepository.save(stock);
     }
 
     private boolean stockExists(Room room, LocalDate date) {

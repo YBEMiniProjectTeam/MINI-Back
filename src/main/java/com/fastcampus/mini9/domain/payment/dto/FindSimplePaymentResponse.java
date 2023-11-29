@@ -1,14 +1,9 @@
-package com.fastcampus.mini9.domain.cart.dto;
-
-import java.util.List;
+package com.fastcampus.mini9.domain.payment.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CreateOrderRequest(
-
-	List<Long> cartIds,
-	String reservationName) {
+public class FindSimplePaymentResponse {
 
 }

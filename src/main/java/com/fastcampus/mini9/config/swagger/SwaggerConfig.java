@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -17,9 +16,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 
 @Profile("!local")
 @OpenAPIDefinition(
-	servers = {
-		@Server(url = "https://anti-bias.kr/api", description = "Server")
-	},
+	// servers = {
+	// @Server(url = "https://anti-bias.kr/api", description = "Server")
+	// },
 	info = @Info(
 		title = "Accommodation Reservation Platform API",
 		description = "Accommodation Reservation Platform를 위한 API",

@@ -55,9 +55,9 @@ public class Room {
 	@OneToMany(mappedBy = "room")
 	private List<Payment> payments = new ArrayList<>();
 
-	private LocalTime checkIn;
+	private LocalTime checkInTime;
 
-	private LocalTime checkOut;
+	private LocalTime checkOutTime;
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Stock> stocks = new ArrayList<>();

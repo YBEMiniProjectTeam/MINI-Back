@@ -4,10 +4,14 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CreateCartRequest(
 
 	@NotNull

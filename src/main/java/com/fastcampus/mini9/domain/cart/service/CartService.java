@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,8 @@ import com.fastcampus.mini9.domain.member.entity.Member;
 import com.fastcampus.mini9.domain.member.repository.MemberRepository;
 import com.fastcampus.mini9.domain.payment.entity.Payment;
 import com.fastcampus.mini9.domain.payment.entity.PaymentStatus;
-import com.fastcampus.mini9.domain.reservation.dto.FindReservationResponse;
+import com.fastcampus.mini9.domain.payment.repository.PaymentRepository;
+import com.fastcampus.mini9.domain.reservation.dto.FindPaymentResponse;
 import com.fastcampus.mini9.domain.reservation.entity.Reservation;
 import com.fastcampus.mini9.domain.reservation.repository.ReservationRepository;
 
@@ -39,6 +41,7 @@ public class CartService {
 	private final MemberRepository memberRepository;
 	private final RoomRepository roomRepository;
 	private final ReservationRepository reservationRepository;
+	private final PaymentRepository paymentRepository;
 
 	public List<FindCartResponse> findCarts(Long memberId) {
 		Map<Long, List<Cart>> cartsByAccommodationId = cartRepository.findByMemberId(memberId).stream()
@@ -67,8 +70,8 @@ public class CartService {
 						room.getPrice(), // 객실 가격
 						cart.getCheckInDate(), // 체크인 날짜
 						cart.getCheckOutDate(), // 체크아웃 날짜
-						room.getCheckIn(), // 체크인 시간
-						room.getCheckOut(), // 체크아웃 시간
+						room.getCheckInTime(), // 체크인 시간
+						room.getCheckOutTime(), // 체크아웃 시간
 						room.getCapacity(), // 기준 인원
 						room.getCapacityMax() // 최대 인원
 					);
@@ -140,8 +143,7 @@ public class CartService {
 	}
 
 	@Transactional
-	public List<FindReservationResponse> createOrder(CreateOrderRequest dto, Long memberId) {
-		List<FindReservationResponse> findReservationResponses = new ArrayList<>();
+	public void createOrder(CreateOrderRequest dto, Long memberId) {
 
 		// TODO: 숙박일 검증
 
@@ -169,20 +171,34 @@ public class CartService {
 			// 예약 생성
 			Reservation reservation = Reservation.builder()
 				.member(member)
-				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getCheckIn()))
-				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getCheckOut()))
+				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getCheckInTime()))
+				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getCheckOutTime()))
 				.name(dto.reservationName())
 				.reservationNo("No.123123123(임시)")
 				.build();
 			reservation.setPayment(payment);
 
 			reservationRepository.save(reservation);
-
-			findReservationResponses.add(new FindReservationResponse(cart.getRoom().getAccommodation().getName(),
-				new FindReservationResponse.RoomInfo(cart.getRoom().getName(), payment.getPrice(),
-					reservation.getCheckIn(), reservation.getCheckOut(), cart.getRoom().getCapacity(),
-					cart.getRoom().getCapacityMax())));
+			cartRepository.delete(cart);
 		}
-		return findReservationResponses;
+	}
+
+	public List<FindPaymentResponse> findRecentOrders(Long memberId, int recentOrderCnt) {
+		List<Payment> payments = paymentRepository.findByMemberIdOrderByPayAtDesc(memberId,
+			PageRequest.of(0, recentOrderCnt));
+		List<FindPaymentResponse> findPaymentResponses = new ArrayList<>();
+
+		for (Payment payment : payments) {
+			Reservation reservation = payment.getReservation();
+			Room room = payment.getRoom();
+			Accommodation accommodation = room.getAccommodation();
+
+			findPaymentResponses.add(
+				new FindPaymentResponse(reservation.getName(), accommodation.getName(),
+					new FindPaymentResponse.RoomInfo(room.getName(), payment.getPrice(),
+						reservation.getCheckIn(), reservation.getCheckOut(), room.getCapacity(),
+						room.getCapacityMax())));
+		}
+		return findPaymentResponses;
 	}
 }

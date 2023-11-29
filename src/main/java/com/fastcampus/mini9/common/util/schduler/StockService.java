@@ -32,4 +32,23 @@ public class StockService {
             }
         }
     }
+    public void createStocks(LocalDate startDate) {
+        LocalDate endDate = startDate.plusDays(1);
+        List<Room> rooms = roomRepository.findAll();
+        for (Room room : rooms) {
+            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                if (!stockExists(room, date)) {
+                    Stock stock = Stock.builder()
+                        .room(room)
+                        .date(date)
+                        .quantity(room.getNumberOfRoom())
+                        .build();
+                    stockRepository.save(stock);
+                }
+            }
+        }
+    }
+    private boolean stockExists(Room room, LocalDate date) {
+        return stockRepository.existsByRoomAndDate(room, date);
+    }
 }

@@ -7,6 +7,7 @@ import com.fastcampus.mini9.domain.accommodation.repository.StockRepository;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class StockService {
 
     private final StockRepository stockRepository;
 
+    @Async
     public void createStocks(LocalDate startDate, LocalDate endDate) {
         List<Room> rooms = roomRepository.findAll();
         for (Room room : rooms) {
@@ -33,6 +35,7 @@ public class StockService {
         }
     }
 
+    @Async
     public void createStocks(LocalDate startDate) {
         LocalDate endDate = startDate.plusDays(1);
         List<Room> rooms = roomRepository.findAll();

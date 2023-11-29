@@ -53,9 +53,6 @@ public class Room {
 	private int numberOfRoom;
 
 	@OneToMany(mappedBy = "room")
-	private List<Stock> stockList = new ArrayList<>();
-
-	@OneToMany(mappedBy = "room")
 	private List<Payment> payments = new ArrayList<>();
 
 	private LocalTime checkIn;

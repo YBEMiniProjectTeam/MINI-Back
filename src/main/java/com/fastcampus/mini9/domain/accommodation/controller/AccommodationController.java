@@ -58,7 +58,7 @@ public class AccommodationController {
 		@RequestParam(required = false, name = "start_date") String startDate,
 		@RequestParam(required = false, name = "end_date") String endDate,
 		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword,
-		@RequestParam(name = "page_num") Integer pageNum, @RequestParam(name = "page_size") Integer pageSize,
+		@RequestParam(name = "page_num", defaultValue = "1") Integer pageNum, @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		SearchAccommodationsRequest searchRequest = new SearchAccommodationsRequest(region, district, startDate,
 			endDate, category, keyword, pageNum, pageSize);

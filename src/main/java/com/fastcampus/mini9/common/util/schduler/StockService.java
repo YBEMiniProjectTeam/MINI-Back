@@ -25,32 +25,11 @@ public class StockService {
         List<Room> rooms = roomRepository.findAll();
         rooms.parallelStream().forEach(room ->
             startDate.datesUntil(endDate).forEach(date ->
-                createStockForDateWithoutExistsCheck(room, date)));
+                saveStock(room, date)));
     }
 
     @Async
-    public void createStocks(LocalDate startDate) {
-        LocalDate endDate = startDate.plusDays(1);
-        List<Room> rooms = roomRepository.findAll();
-        rooms.parallelStream().forEach(room ->
-            startDate.datesUntil(endDate).forEach(date ->
-                createStockForDate(room, date)));
-    }
-
-    @Async
-    public void createStockForDate(Room room, LocalDate date) {
-        if (!stockExists(room, date)) {
-            Stock stock = Stock.builder()
-                .room(room)
-                .date(date)
-                .quantity(room.getNumberOfRoom())
-                .build();
-            stockRepository.save(stock);
-        }
-    }
-
-    @Async
-    public void createStockForDateWithoutExistsCheck(Room room, LocalDate date) {
+    public void saveStock(Room room, LocalDate date) {
         Stock stock = Stock.builder()
             .room(room)
             .date(date)
@@ -59,10 +38,7 @@ public class StockService {
         stockRepository.save(stock);
     }
 
-    private boolean stockExists(Room room, LocalDate date) {
-        return stockRepository.existsByRoomAndDate(room, date);
-    }
-
+    @Async
     public void deleteBeforeStock(LocalDate date) {
         stockRepository.deleteStocksBeforeDate(date);
     }

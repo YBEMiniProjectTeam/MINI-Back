@@ -4,6 +4,7 @@ import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodat
 import com.fastcampus.mini9.domain.accommodation.exception.repository.IllegalRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -28,6 +29,6 @@ public interface AccommodationQueryDslRepository {
             String region, String district,
             LocalDate startDate, LocalDate endDate,
             String category, String keyword,
-            PageRequest of
+            Pageable of
     ) throws IllegalRequestException;
 }

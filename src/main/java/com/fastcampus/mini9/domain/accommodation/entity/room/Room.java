@@ -1,6 +1,5 @@
 package com.fastcampus.mini9.domain.accommodation.entity.room;
 
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,6 @@ public class Room {
 
 	private Integer price;
 
-	private String description;
-
 	private int capacity;
 
 	private int capacityMax;
@@ -54,10 +51,6 @@ public class Room {
 
 	@OneToMany(mappedBy = "room")
 	private List<Payment> payments = new ArrayList<>();
-
-	private LocalTime checkInTime;
-
-	private LocalTime checkOutTime;
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Stock> stocks = new ArrayList<>();

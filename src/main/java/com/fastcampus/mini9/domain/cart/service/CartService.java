@@ -70,8 +70,8 @@ public class CartService {
 						room.getPrice(), // 객실 가격
 						cart.getCheckInDate(), // 체크인 날짜
 						cart.getCheckOutDate(), // 체크아웃 날짜
-						room.getCheckInTime(), // 체크인 시간
-						room.getCheckOutTime(), // 체크아웃 시간
+						room.getAccommodation().getCheckIn(), // 체크인 시간
+						room.getAccommodation().getCheckOut(), // 체크아웃 시간
 						room.getCapacity(), // 기준 인원
 						room.getCapacityMax() // 최대 인원
 					);
@@ -171,8 +171,8 @@ public class CartService {
 			// 예약 생성
 			Reservation reservation = Reservation.builder()
 				.member(member)
-				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getCheckInTime()))
-				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getCheckOutTime()))
+				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getAccommodation().getCheckIn()))
+				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getAccommodation().getCheckOut()))
 				.name(dto.reservationName())
 				.reservationNo("No.123123123(임시)")
 				.build();

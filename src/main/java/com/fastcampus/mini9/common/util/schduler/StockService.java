@@ -32,6 +32,7 @@ public class StockService {
             }
         }
     }
+
     public void createStocks(LocalDate startDate) {
         LocalDate endDate = startDate.plusDays(1);
         List<Room> rooms = roomRepository.findAll();
@@ -48,7 +49,12 @@ public class StockService {
             }
         }
     }
+
     private boolean stockExists(Room room, LocalDate date) {
         return stockRepository.existsByRoomAndDate(room, date);
+    }
+
+    public void deleteBeforeStock(LocalDate date) {
+        stockRepository.deleteStocksBeforeDate(date);
     }
 }

@@ -23,5 +23,6 @@ public class StockScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void dailyStock() {
         stockService.createStocks(LocalDate.now().plusMonths(INIT_MONTH));
+        stockService.deleteBeforeStock(LocalDate.now());
     }
 }

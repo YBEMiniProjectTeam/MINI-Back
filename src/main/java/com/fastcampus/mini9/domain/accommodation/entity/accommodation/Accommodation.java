@@ -1,8 +1,10 @@
 package com.fastcampus.mini9.domain.accommodation.entity.accommodation;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import org.hibernate.annotations.BatchSize;
 
 import com.fastcampus.mini9.domain.accommodation.entity.location.Location;
@@ -53,22 +55,27 @@ public class Accommodation {
 
 	@OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
 	@BatchSize(size = 20)
-	private List<AccommodationImage> images;
+	private List<AccommodationImage> images = new ArrayList<>();
 
 	@OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
 	@BatchSize(size = 20)
 	private List<Room> rooms;
 
-	// TODO: 이미지 업로드 후 첫번째 사진 로드 혹은 default 이미지
-	public String getThumbnail() {
-		return "https://bit.ly/2Z4KKcF";
-	}
+    public String getThumbnail() {
+        if (images.isEmpty()) {
+            return "https://bit.ly/2Z4KKcF";
+        }
+        return images.get(0).getUrl();
+    }
 
-	public List<String> getImagesAsString() {
-		// TODO: S3에 이미지 업로드 후 DB에 url 저장
-		// return images.stream().map(AccommodationImage::getUrl).collect(Collectors.toList());
-		return List.of("https://bit.ly/2Z4KKcF");
-	}
+    public List<String> getImagesAsString() {
+        if (images.isEmpty()) {
+            return List.of("https://bit.ly/2Z4KKcF");
+        }
+        return images.stream()
+            .map(AccommodationImage::getUrl)
+            .collect(Collectors.toList());
+    }
 
 	public Integer getMinPrice() {
 		return rooms.stream().map(Room::getPrice).min(Comparator.naturalOrder()).orElse(0);

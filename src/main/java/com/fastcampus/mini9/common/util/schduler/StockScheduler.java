@@ -18,7 +18,7 @@ public class StockScheduler {
     @Async
     @PostConstruct
     public void initStock() {
-        stockService.createStocks(LocalDate.now(), LocalDate.now().plusDays(1));
+        stockService.createStocks(LocalDate.now(), LocalDate.now().plusMonths(INIT_MONTH));
     }
 
     @Async

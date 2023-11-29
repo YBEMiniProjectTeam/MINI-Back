@@ -23,22 +23,18 @@ public class StockService {
     @Async
     public void createStocks(LocalDate startDate, LocalDate endDate) {
         List<Room> rooms = roomRepository.findAll();
-        rooms.parallelStream().forEach(room -> {
-            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                createStockForDateWithoutExistsCheck(room, date);
-            }
-        });
+        rooms.parallelStream().forEach(room ->
+            startDate.datesUntil(endDate).forEach(date ->
+                createStockForDateWithoutExistsCheck(room, date)));
     }
 
     @Async
     public void createStocks(LocalDate startDate) {
         LocalDate endDate = startDate.plusDays(1);
         List<Room> rooms = roomRepository.findAll();
-        rooms.parallelStream().forEach(room -> {
-            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                createStockForDate(room, date);
-            }
-        });
+        rooms.parallelStream().forEach(room ->
+            startDate.datesUntil(endDate).forEach(date ->
+                createStockForDate(room, date)));
     }
 
     @Async

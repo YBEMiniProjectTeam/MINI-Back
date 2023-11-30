@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -54,7 +55,10 @@ public record FindCartResponse(
 		int capacity,
 
 		@Schema(example = "4")
-		int capacityMax) {
+		int capacityMax,
+
+		@Schema(example = "객실 타입")
+		AccommodationType accommodationType) {
 
 		public String getCheckInTime() {
 			return checkInTime.format(DateTimeFormatter.ofPattern("HH:mm"));

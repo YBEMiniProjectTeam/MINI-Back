@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.domain.payment.dto.FindAllPaymentResponse;
-import com.fastcampus.mini9.domain.payment.dto.FindSimplePaymentResponse;
+import com.fastcampus.mini9.domain.payment.dto.FindDetailPaymentResponse;
 import com.fastcampus.mini9.domain.payment.service.PaymentService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,8 +29,8 @@ public class PaymentController {
 	}
 
 	@Operation(summary = "예약, 결제 상세 내역 조회")
-	@GetMapping("/{reservationId}")
-	public DataResponseBody<FindSimplePaymentResponse> findDetail(@PathVariable Long reservationId) {
-		return DataResponseBody.success(paymentService.findDetail(reservationId));
+	@GetMapping("/{paymentId}")
+	public DataResponseBody<FindDetailPaymentResponse> findDetail(@PathVariable Long paymentId) {
+		return DataResponseBody.success(paymentService.findDetail(paymentId));
 	}
 }

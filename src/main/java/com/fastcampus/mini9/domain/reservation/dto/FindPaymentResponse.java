@@ -3,6 +3,7 @@ package com.fastcampus.mini9.domain.reservation.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -11,11 +12,26 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record FindPaymentResponse(
 
-	@Schema(example = "박경탁 (예약자명)")
-	String reservationName,
+	@Schema(example = "예약자 이름")
+	String reservationUserName,
+
+	@Schema(example = "예약자 이메일")
+	String reservationUserEmail,
+
+	@Schema(example = "이용자 이름")
+	String guestName,
+
+	@Schema(example = "이용자 이메일")
+	String guestEmail,
 
 	@Schema(example = "조선 호텔 (숙소명)")
 	String accommodationName,
+
+	@Schema(example = "숙소 타입")
+	AccommodationType accommodationType,
+
+	@Schema(example = "숙소 썸네일 URL")
+	String accommodationThumbnailUrl,
 
 	FindPaymentResponse.RoomInfo roomInfo) {
 

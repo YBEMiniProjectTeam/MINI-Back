@@ -57,6 +57,9 @@ public class SecurityConfig {
     private static final String[] ACCOMMODATION_GET_REQUEST = {
         "/accommodations/**", "/rooms/**"
     };
+    private static final String[] WISH_REQUEST = {
+        "/accommodations/*/wish", "/wished"
+    };
     private static final String[] REGION_GET_REQUEST = {
         "/locations/**"
     };
@@ -94,6 +97,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(SWAGGER_PAGE).permitAll()
                 .requestMatchers(AUTH_REQUEST).permitAll()
+                .requestMatchers(WISH_REQUEST).authenticated()
                 .requestMatchers(ACCOMMODATION_GET_REQUEST).permitAll()
                 .requestMatchers(REGION_GET_REQUEST).permitAll()
                 .requestMatchers("/error/**").permitAll()

@@ -12,14 +12,6 @@ import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RoomServiceMapper {
-	// findRoomsInAccommodation()
-	List<RoomResponse> entityListToResponseList(List<Room> roomList);
-
-	// TODO: stock 조회 로직
-	@Mapping(target = "capacity_max", source = "room.capacityMax")
-	@Mapping(target = "stock", constant = "2")
-	@Mapping(target = "description", source = "room.details")
-	RoomResponse entityToResponse(Room room);
 
 	// findRoom()
 	// TODO: stock 조회 로직

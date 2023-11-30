@@ -9,8 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomResponse;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
 
@@ -28,7 +28,6 @@ public interface AccommodationDtoMapper {
 	List<GetAccommodationsResponse.GetAccommodation> searchResultToResponseDto(
 		List<SearchAccommodation> accommodationResponses);
 
-	// TODO: @Mapping(target = "min_price", source = "?")
 	GetAccommodationsResponse.GetAccommodation accommodationResponseToResDto(
 		SearchAccommodation accommodationResponse);
 

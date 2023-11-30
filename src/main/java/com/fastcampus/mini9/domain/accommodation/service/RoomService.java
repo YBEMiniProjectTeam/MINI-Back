@@ -27,12 +27,18 @@ public class RoomService implements RoomQuery {
 	public FindRoomsInAccommodationResponse findRoomsInAccommodation(FindRoomsInAccommodationRequest request) {
 		Accommodation accommodation = accommodationRepository.findById(request.accommodationId()).orElseThrow();
 
-		List<Room> findRoomsByCondition = accommodation.getRooms().stream()
-			.filter(Room -> request.guestNum() >= Room.getCapacity() && request.guestNum() <= Room.getCapacityMax())
-			// TODO: startDate ~ endDate에 재고가 있는 Room만 조회
+		List<RoomResponse> responseList = accommodation.getRooms().stream()
+			.filter(Room -> Room.hasStockBetween(request.startDate(), request.endDate(), request.guestNum()))
+			.map(room -> new RoomResponse(
+				room.getId(),
+				room.getName(),
+				room.getPrice(),
+				room.getCapacity(),
+				room.getCapacityMax(),
+				Description.fromEntity(room.getDetails()),
+				room.getMinStock(request.startDate(), request.endDate())
+			))
 			.collect(Collectors.toList());
-		// TODO: stock 조회 로직
-		List<RoomResponse> responseList = mapper.entityListToResponseList(findRoomsByCondition);
 		return new FindRoomsInAccommodationResponse(responseList);
 	}
 

@@ -1,8 +1,11 @@
 package com.fastcampus.mini9.domain.accommodation.entity.room;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.BatchSize;
 
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.payment.entity.Payment;
@@ -53,6 +56,7 @@ public class Room {
 	private List<Payment> payments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+	@BatchSize(size = 60)
 	private List<Stock> stocks = new ArrayList<>();
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -71,5 +75,23 @@ public class Room {
 	}
 
 	public void calcStock(ZonedDateTime checkIn, ZonedDateTime checkOut, int i) {
+	}
+
+	public boolean hasStockBetween(LocalDate startDate, LocalDate endDate, Long guestNum) {
+		return this.getStocks().size() != 0
+			&& this.getStocks().stream()
+			.filter(Stock ->
+				Stock.getDate().isAfter(startDate.minusDays(1L))
+					&& Stock.getDate().isBefore(endDate))
+			.allMatch(Stock -> Stock.getQuantity() >= guestNum);
+	}
+
+	public int getMinStock(LocalDate startDate, LocalDate endDate) {
+		return this.getStocks().stream()
+			.filter(Stock ->
+				Stock.getDate().isAfter(startDate.minusDays(1L))
+					&& Stock.getDate().isBefore(endDate))
+			.mapToInt(Stock::getQuantity)
+			.min().orElse(0);
 	}
 }

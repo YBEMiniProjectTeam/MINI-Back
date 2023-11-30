@@ -1,5 +1,6 @@
 package com.fastcampus.mini9.domain.accommodation.service.usecase;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
@@ -13,8 +14,8 @@ public interface AccommodationQuery {
 	record SearchAccommodationsRequest(
 		String region,
 		String district,
-		String startDate,
-		String endDate,
+		LocalDate startDate,
+		LocalDate endDate,
 		String category,
 		String keyword,
 		Integer pageNum,

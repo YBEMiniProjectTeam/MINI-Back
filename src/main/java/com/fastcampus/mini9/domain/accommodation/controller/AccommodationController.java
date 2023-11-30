@@ -3,6 +3,8 @@ package com.fastcampus.mini9.domain.accommodation.controller;
 import static com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery.*;
 import static com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery.*;
 
+import java.time.LocalDate;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +15,10 @@ import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.common.response.ErrorResponseBody;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.AccommodationDtoMapper;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationResponse;
-import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAccommodationsResponse;
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomResponse;
+import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery;
 
@@ -55,10 +57,11 @@ public class AccommodationController {
 	@GetMapping("/accommodations")
 	public DataResponseBody<GetAccommodationsResponse> getAccommodations(
 		@RequestParam(required = false) String region, @RequestParam(required = false) String district,
-		@RequestParam(required = false, name = "start_date") String startDate,
-		@RequestParam(required = false, name = "end_date") String endDate,
+		@RequestParam(required = false, name = "start_date") LocalDate startDate,
+		@RequestParam(required = false, name = "end_date") LocalDate endDate,
 		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword,
-		@RequestParam(name = "page_num", defaultValue = "1") Integer pageNum, @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize,
+		@RequestParam(name = "page_num", defaultValue = "1") Integer pageNum,
+		@RequestParam(name = "page_size", defaultValue = "10") Integer pageSize,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		SearchAccommodationsRequest searchRequest = new SearchAccommodationsRequest(region, district, startDate,
 			endDate, category, keyword, pageNum, pageSize);
@@ -112,7 +115,7 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
 	public DataResponseBody<GetRoomsResponse> getRooms(@PathVariable Long accommodationId,
-		@RequestParam(name = "start_date") String startDate, @RequestParam(name = "end_date") String endDate,
+		@RequestParam(name = "start_date") LocalDate startDate, @RequestParam(name = "end_date") LocalDate endDate,
 		@RequestParam(name = "guest_num") Long guestNum) {
 		FindRoomsInAccommodationRequest findRequest = new FindRoomsInAccommodationRequest(accommodationId, startDate,
 			endDate, guestNum);

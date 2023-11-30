@@ -36,7 +36,7 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 		List<Accommodation> content = jpaQueryFactory
 			.select(accommodation)
 			.from(accommodation)
-			.innerJoin(stock)
+			.join(stock)
 			.on(
 				stock.room.in(accommodation.rooms),
 				dateBetween(startDateReq, endDateReq),
@@ -54,7 +54,7 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 		JPAQuery<Long> countQuery = jpaQueryFactory
 			.select(accommodation.count())
 			.from(accommodation)
-			.innerJoin(stock)
+			.join(stock)
 			.on(
 				stock.room.in(accommodation.rooms),
 				dateBetween(startDateReq, endDateReq),
@@ -73,7 +73,7 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 		if (startDateReq != null && endDateReq != null) {
 			return stock.date.between(startDateReq, endDateReq);
 		}
-		return stock.date.goe(LocalDate.now());
+		return stock.date.after(LocalDate.now());
 	}
 
 	private BooleanExpression keywordEq(String keywordReq) {

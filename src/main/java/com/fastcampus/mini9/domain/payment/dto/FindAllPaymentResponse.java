@@ -34,7 +34,8 @@ public record FindAllPaymentResponse(
 		LocalDateTime checkOut,
 
 		@Schema(example = "2023-10-10")
-		LocalDateTime payAt
+		LocalDateTime payAt,
+		String thumbnail
 	) {
 		public String getCheckIn() {
 			return checkIn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

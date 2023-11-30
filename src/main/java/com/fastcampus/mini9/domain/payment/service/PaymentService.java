@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.payment.dto.FindAllPaymentResponse;
-import com.fastcampus.mini9.domain.payment.dto.FindSimplePaymentResponse;
+import com.fastcampus.mini9.domain.payment.dto.FindDetailPaymentResponse;
+import com.fastcampus.mini9.domain.payment.dto.PaymentDtoMapper;
 import com.fastcampus.mini9.domain.payment.entity.Payment;
 import com.fastcampus.mini9.domain.payment.repository.PaymentRepository;
 import com.fastcampus.mini9.domain.reservation.entity.Reservation;
@@ -20,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class PaymentService {
 
 	private final PaymentRepository paymentRepository;
+
+	private final PaymentDtoMapper paymentDtoMapper;
 
 	public List<FindAllPaymentResponse> findAll() {
 		List<Payment> payments = paymentRepository.findAll();
@@ -36,13 +39,16 @@ public class PaymentService {
 			}
 			return new FindAllPaymentResponse(room.getAccommodation().getName(),
 				new FindAllPaymentResponse.RoomInfo(
-					reservation.getId(), room.getName(), reservation.getCheckIn(), reservation.getCheckOut(),
+					payment.getId(), room.getName(), reservation.getCheckIn(), reservation.getCheckOut(),
 					payment.getPayAt()
 				));
 		}).collect(Collectors.toList());
 	}
 
-	public FindSimplePaymentResponse findDetail(Long reservationId) {
-		return null;
+	public FindDetailPaymentResponse findDetail(Long paymentId) {
+		Payment payment = paymentRepository.findById(paymentId)
+			.orElseThrow(() -> new NoSuchElementException("해당 결제내역이 존재하지 않습니다."));
+
+		return paymentDtoMapper.paymentToDetailResponse(payment);
 	}
 }

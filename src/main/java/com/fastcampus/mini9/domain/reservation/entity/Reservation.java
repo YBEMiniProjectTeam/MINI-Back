@@ -42,7 +42,9 @@ public class Reservation {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "reservation", cascade = CascadeType.ALL)
 	private Payment payment;
 
-	private String name;
+	private String guestName;
+
+	private String guestEmail;
 
 	private String reservationNo;
 

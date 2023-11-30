@@ -56,7 +56,7 @@ public class CartService {
 		Accommodation accommodation = carts.get(0).getRoom().getAccommodation();
 
 		return new FindCartResponse(
-			accommodation.getName(),
+			accommodation.getName(), // 숙소명
 			accommodation.getDetails().getAddress(), // 숙소 주소
 			carts.stream()
 				.map(cart -> {
@@ -73,7 +73,8 @@ public class CartService {
 						room.getAccommodation().getCheckIn(), // 체크인 시간
 						room.getAccommodation().getCheckOut(), // 체크아웃 시간
 						room.getCapacity(), // 기준 인원
-						room.getCapacityMax() // 최대 인원
+						room.getCapacityMax(), // 최대 인원
+						accommodation.getType() // 객실 타입
 					);
 				}).collect(Collectors.toList())
 		);
@@ -173,7 +174,8 @@ public class CartService {
 				.member(member)
 				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getAccommodation().getCheckIn()))
 				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getAccommodation().getCheckOut()))
-				.name(dto.reservationName())
+				.guestName(dto.guestName())
+				.guestEmail(dto.guestEmail())
 				.reservationNo("No.123123123(임시)")
 				.build();
 			reservation.setPayment(payment);
@@ -190,11 +192,14 @@ public class CartService {
 
 		for (Payment payment : payments) {
 			Reservation reservation = payment.getReservation();
+			Member member = reservation.getMember();
 			Room room = payment.getRoom();
 			Accommodation accommodation = room.getAccommodation();
 
 			findPaymentResponses.add(
-				new FindPaymentResponse(reservation.getName(), accommodation.getName(),
+				new FindPaymentResponse(member.getName(), member.getEmail(), reservation.getGuestName(),
+					reservation.getGuestEmail(), accommodation.getName(), accommodation.getType(),
+					accommodation.getThumbnail(),
 					new FindPaymentResponse.RoomInfo(room.getName(), payment.getPrice(),
 						reservation.getCheckIn(), reservation.getCheckOut(), room.getCapacity(),
 						room.getCapacityMax())));

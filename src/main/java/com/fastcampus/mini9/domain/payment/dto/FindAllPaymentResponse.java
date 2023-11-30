@@ -18,7 +18,7 @@ public record FindAllPaymentResponse(
 
 	public record RoomInfo(
 
-		Long reservationId,
+		Long paymentId,
 
 		@Schema(example = "스위트룸 (객실명)")
 		String roomName,

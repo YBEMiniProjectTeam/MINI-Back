@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -176,7 +177,7 @@ public class CartService {
 				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getAccommodation().getCheckOut()))
 				.guestName(dto.guestName())
 				.guestEmail(dto.guestEmail())
-				.reservationNo("No.123123123(임시)")
+				.reservationNo(UUID.randomUUID().toString())
 				.build();
 			reservation.setPayment(payment);
 

@@ -52,8 +52,6 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 			.limit(pageReq.getPageSize())
 			.fetch();
 
-		System.out.println(content.size());
-
 		JPAQuery<Long> countQuery = jpaQueryFactory
 			.select(accommodation.count())
 			.from(accommodation)
@@ -68,7 +66,6 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 				categoryEq(categoryReq),
 				keywordEq(keywordReq)
 			);
-
 
 		return PageableExecutionUtils.getPage(content, pageReq, countQuery::fetchOne);
 	}

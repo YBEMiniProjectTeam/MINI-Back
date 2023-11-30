@@ -123,7 +123,7 @@ public class SecurityConfig {
 
         http
             .anonymous((anonymous) -> anonymous
-                .principal(new UserPrincipal(null, "anonymous")));
+                .principal(new UserPrincipal(0L, "anonymous")));
 
         http
             .exceptionHandling((exceptionHandling) -> exceptionHandling

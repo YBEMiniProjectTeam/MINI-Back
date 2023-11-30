@@ -2,7 +2,6 @@ package com.fastcampus.mini9.domain.accommodation.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,10 +54,10 @@ public class AccommodationService implements AccommodationQuery {
 		);
 
 		// TODO: 현재 로그인 상태면 검색된 accommodation에 좋아요 표시. 1안:UserPrincipal->Member. 2안:MemberService에 구현. 3안: 여기에 구현
-		Optional<Member> loginMember = memberRepository.findById(userPrincipal.id());
-		if (loginMember.isPresent()) {
+		if (userPrincipal.id() != 0L) {
+			Member loginMember = memberRepository.findById(userPrincipal.id()).orElseThrow();
 			Page<SearchAccommodation> result = all
-				.map(Accommodation -> SearchAccommodation.fromEntity(Accommodation, loginMember.get()));
+				.map(Accommodation -> SearchAccommodation.fromEntity(Accommodation, loginMember));
 			return new SearchAccommodationsResponse(result.toList(), result.getNumber(), result.getSize(),
 				result.getTotalPages(), result.getTotalElements(), result.isFirst(), result.isLast());
 		}

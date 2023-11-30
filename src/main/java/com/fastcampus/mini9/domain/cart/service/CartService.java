@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -82,24 +83,29 @@ public class CartService {
 	}
 
 	@Transactional
-	public void addCart(CreateCartRequest dto, Long id) {
+	public Long addCart(CreateCartRequest dto, Long id) {
 		Member member = memberRepository.findById(id).orElseThrow();
 		Room room = roomRepository.findById(dto.roomId()).orElseThrow();
 
 		// TODO: 체크인, 체크아웃 날짜 검증
 
-		cartRepository.findByCheckInDateAndCheckOutDateAndMemberIdAndRoomId(
-				dto.checkInDate(), dto.checkOutDate(),
-				member.getId(), room.getId())
-			.ifPresentOrElse(
-				Cart::increaseQuantity,
-				() -> cartRepository.save(Cart.builder()
-					.checkInDate(dto.checkInDate())
-					.checkOutDate(dto.checkOutDate())
-					.member(member)
-					.room(room)
-					.build())
-			);
+		Optional<Cart> optionalCart = cartRepository.findByCheckInDateAndCheckOutDateAndMemberIdAndRoomId(
+			dto.checkInDate(), dto.checkOutDate(), member.getId(), room.getId());
+
+		if (optionalCart.isEmpty()) {
+			Cart cart = cartRepository.save(Cart.builder()
+				.checkInDate(dto.checkInDate())
+				.checkOutDate(dto.checkOutDate())
+				.member(member)
+				.room(room)
+				.build());
+
+			return cart.getId();
+		}
+		Cart cart = optionalCart.get();
+		cart.increaseQuantity();
+
+		return cart.getId();
 	}
 
 	@Transactional
@@ -182,6 +188,8 @@ public class CartService {
 			reservation.setPayment(payment);
 
 			reservationRepository.save(reservation);
+
+			// TODO: 무조건 삭제 시키는게 아니라 수량을 감소 시킬 수도 있다.
 			cartRepository.delete(cart);
 		}
 	}

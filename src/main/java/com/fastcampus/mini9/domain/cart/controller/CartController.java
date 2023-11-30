@@ -94,4 +94,13 @@ public class CartController {
 		@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam int count) {
 		return DataResponseBody.success(cartService.findRecentOrders(userPrincipal.id(), count), "SUCCESS");
 	}
+
+	@Operation(summary = "바로 결제 버튼")
+	@PostMapping("/orders/payments-eager")
+	public BaseResponseBody createOrdersEager(@RequestBody CreateCartRequest createCartRequest,
+		@AuthenticationPrincipal UserPrincipal userPrincipal) {
+		Long cartId = cartService.addCart(createCartRequest, userPrincipal.id());
+
+		return DataResponseBody.success(cartService.findOrders(new CartIdsRequest(List.of(cartId))), "SUCCESS");
+	}
 }

@@ -3,6 +3,7 @@ package com.fastcampus.mini9.domain.payment.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fastcampus.mini9.domain.payment.entity.PaymentStatus;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -39,7 +40,10 @@ public record FindDetailPaymentResponse(
 	String guestEmail,
 
 	@Schema(example = "결제 금액")
-	int price
+	int price,
+
+	@Schema(example = "결제 상태")
+	PaymentStatus paymentStatus
 ) {
 	public String getCheckIn() {
 		return checkIn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

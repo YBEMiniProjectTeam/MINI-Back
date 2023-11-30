@@ -124,6 +124,7 @@ public class AccommodationController {
 		return DataResponseBody.success(result, "SUCCESS");
 	}
 
+	@Deprecated
 	@Operation(summary = "객실 상세조회")
 	@ApiResponses(value = {
 		@ApiResponse(

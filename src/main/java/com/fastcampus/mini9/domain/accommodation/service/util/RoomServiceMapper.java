@@ -14,7 +14,6 @@ import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 public interface RoomServiceMapper {
 
 	// findRoom()
-	// TODO: stock 조회 로직
 	@Mapping(target = "capacity_max", source = "capacityMax")
 	@Mapping(target = "stock", constant = "2")
 	@Mapping(target = "description", source = "room.details")

@@ -1,6 +1,9 @@
 package com.fastcampus.mini9.domain.accommodation.service.usecase;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import com.fastcampus.mini9.domain.accommodation.entity.room.RoomDetails;
 
 public interface RoomQuery {
 	FindRoomsInAccommodationResponse findRoomsInAccommodation(FindRoomsInAccommodationRequest request);
@@ -9,8 +12,8 @@ public interface RoomQuery {
 
 	record FindRoomsInAccommodationRequest(
 		Long accommodationId,
-		String startDate,
-		String endDate,
+		LocalDate startDate,
+		LocalDate endDate,
 		Long guestNum
 	) {
 	}
@@ -46,6 +49,23 @@ public interface RoomQuery {
 		boolean toiletries,
 		boolean tv
 	) {
+		public static Description fromEntity(RoomDetails roomDetails) {
+			return new Description(
+				roomDetails.isAirConditioner(),
+				roomDetails.isBathFacility(),
+				roomDetails.isBathtub(),
+				roomDetails.isCookware(),
+				roomDetails.isDiningTable(),
+				roomDetails.isHairDryer(),
+				roomDetails.isHomeTheater(),
+				roomDetails.isInternet(),
+				roomDetails.isPc(),
+				roomDetails.isRefrigerator(),
+				roomDetails.isSofa(),
+				roomDetails.isToiletries(),
+				roomDetails.isTv()
+			);
+		}
 	}
 
 	record FindRoomRequest(

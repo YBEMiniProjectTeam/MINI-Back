@@ -36,7 +36,7 @@ public class WishController {
 		@PathVariable Long accommodationId,
 		@AuthenticationPrincipal UserPrincipal principal
 	) {
-		wishService.addWish(accommodationId, principal.getName());
+		wishService.addWish(accommodationId, principal.email());
 		return BaseResponseBody.success("위시 등록 완료");
 	}
 
@@ -45,7 +45,7 @@ public class WishController {
 		@PathVariable Long accommodationId,
 		@AuthenticationPrincipal UserPrincipal principal
 	) {
-		wishService.deleteWish(accommodationId, principal.getName());
+		wishService.deleteWish(accommodationId, principal.email());
 		return BaseResponseBody.success("위시 해제 완료");
 	}
 

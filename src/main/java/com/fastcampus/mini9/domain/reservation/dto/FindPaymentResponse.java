@@ -33,9 +33,9 @@ public record FindPaymentResponse(
 	@Schema(example = "숙소 썸네일 URL")
 	String accommodationThumbnailUrl,
 
-	FindPaymentResponse.RoomInfo roomInfo) {
+	FindPaymentRoomInfo roomInfo) {
 
-	public record RoomInfo(
+	public record FindPaymentRoomInfo(
 
 		@Schema(example = "스위트룸 (객실명)")
 		String roomName,
@@ -53,7 +53,9 @@ public record FindPaymentResponse(
 		int capacity,
 
 		@Schema(example = "4")
-		int capacityMax
+		int capacityMax,
+
+		Integer quantity
 	) {
 		public String getCheckIn() {
 			return checkIn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

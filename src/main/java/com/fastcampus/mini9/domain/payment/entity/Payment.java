@@ -37,6 +37,8 @@ public class Payment {
 
 	private Integer price;
 
+	private Integer quantity;
+
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
 

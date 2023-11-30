@@ -20,9 +20,9 @@ public record FindCartResponse(
 	@Schema(example = "서울시 동대문구 (숙소 주소)")
 	String address,
 
-	List<FindCartResponse.RoomInfo> roomInfos) {
+	List<FindCartRoomInfo> roomInfos) {
 
-	public record RoomInfo(
+	public record FindCartRoomInfo(
 
 		@Schema(example = "1")
 		Long cartId,

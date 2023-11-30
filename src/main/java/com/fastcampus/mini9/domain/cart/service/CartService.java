@@ -64,7 +64,7 @@ public class CartService {
 				.map(cart -> {
 					Room room = cart.getRoom();
 
-					return new FindCartResponse.RoomInfo(
+					return new FindCartResponse.FindCartRoomInfo(
 						cart.getId(), // 장바구니 ID
 						cart.getQuantity(), // 수량
 						room.getName(), // 객실명
@@ -171,6 +171,7 @@ public class CartService {
 			Payment payment = Payment.builder()
 				.payAt(LocalDateTime.now())
 				.price(cart.getRoom().getPrice())
+				.quantity(cart.getQuantity())
 				.status(PaymentStatus.COMPLETED)
 				.member(member)
 				.room(cart.getRoom())
@@ -209,9 +210,9 @@ public class CartService {
 				new FindPaymentResponse(member.getName(), member.getEmail(), reservation.getGuestName(),
 					reservation.getGuestEmail(), accommodation.getName(), accommodation.getType(),
 					accommodation.getThumbnail(),
-					new FindPaymentResponse.RoomInfo(room.getName(), payment.getPrice(),
+					new FindPaymentResponse.FindPaymentRoomInfo(room.getName(), payment.getPrice(),
 						reservation.getCheckIn(), reservation.getCheckOut(), room.getCapacity(),
-						room.getCapacityMax())));
+						room.getCapacityMax(), payment.getQuantity())));
 		}
 		return findPaymentResponses;
 	}

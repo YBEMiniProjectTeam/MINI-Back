@@ -62,21 +62,22 @@ public class Accommodation {
 	@BatchSize(size = 20)
 	private List<Room> rooms;
 
-    public String getThumbnail() {
-        if (images.isEmpty()) {
-            return "https://bit.ly/2Z4KKcF";
-        }
-        return images.get(0).getUrl();
-    }
+	public String getThumbnail() {
+		if (images.isEmpty()) {
+			return "https://media.discordapp.net/attachments/1179460826080493630/1179875398977343519/bd76ed1d6a75320b.png?ex=657b5f98&is=6568ea98&hm=e054c9fc41af94e7a978aa60e680b88f919d0feaf376cc08cad961b9d90cb6af&=&format=webp&quality=lossless&width=647&height=259";
+		}
+		return images.get(0).getUrl();
+	}
 
-    public List<String> getImagesAsString() {
-        if (images.isEmpty()) {
-            return List.of("https://bit.ly/2Z4KKcF");
-        }
-        return images.stream()
-            .map(AccommodationImage::getUrl)
-            .collect(Collectors.toList());
-    }
+	public List<String> getImagesAsString() {
+		if (images.isEmpty()) {
+			return List.of(
+				"https://media.discordapp.net/attachments/1179460826080493630/1179875398977343519/bd76ed1d6a75320b.png?ex=657b5f98&is=6568ea98&hm=e054c9fc41af94e7a978aa60e680b88f919d0feaf376cc08cad961b9d90cb6af&=&format=webp&quality=lossless&width=647&height=259");
+		}
+		return images.stream()
+			.map(AccommodationImage::getUrl)
+			.collect(Collectors.toList());
+	}
 
 	public Integer getMinPrice() {
 		return rooms.stream().map(Room::getPrice).min(Comparator.naturalOrder()).orElse(0);

@@ -36,7 +36,7 @@ public class RoomService implements RoomQuery {
 				room.getCapacity(),
 				room.getCapacityMax(),
 				Description.fromEntity(room.getDetails()),
-				room.getMinStock(request.startDate(), request.endDate())
+				2
 			))
 			.collect(Collectors.toList());
 		return new FindRoomsInAccommodationResponse(responseList);

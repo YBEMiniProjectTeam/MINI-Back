@@ -25,9 +25,9 @@ public class WishService {
 	private final AccommodationRepository accommodationRepository;
 	private final MemberRepository memberRepository;
 
-	public void addWish(Long accommodationId, String userEmail) {
+	public void addWish(Long accommodationId, UserPrincipal userPrincipal) {
 		Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
-		Member member = memberRepository.findByEmail(userEmail).orElseThrow();
+		Member member = memberRepository.findById(userPrincipal.id()).orElseThrow();
 
 		if (wishRepository.existsByAccommodationAndMember(accommodation, member)) {
 			throw new AlreadyWishException();
@@ -37,9 +37,9 @@ public class WishService {
 		wishRepository.saveAndFlush(newWish);
 	}
 
-	public void deleteWish(Long accommodationId, String userEmail) {
+	public void deleteWish(Long accommodationId, UserPrincipal userPrincipal) {
 		Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
-		Member member = memberRepository.findByEmail(userEmail).orElseThrow();
+		Member member = memberRepository.findById(userPrincipal.id()).orElseThrow();
 
 		if (!wishRepository.existsByAccommodationAndMember(accommodation, member)) {
 			throw new AlreadyWishException("등록되지 않은 숙소");

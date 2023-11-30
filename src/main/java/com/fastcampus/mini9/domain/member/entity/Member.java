@@ -18,12 +18,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode(of = {"id"})
 public class Member {
 
 	@Id
@@ -40,8 +42,8 @@ public class Member {
 
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Cart> carts = new ArrayList<>();
-  
-  @OneToMany(mappedBy = "member")
+
+	@OneToMany(mappedBy = "member")
 	private List<Wish> wishList;
 
 	@Builder

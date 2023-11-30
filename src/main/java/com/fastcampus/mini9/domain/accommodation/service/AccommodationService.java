@@ -2,6 +2,7 @@ package com.fastcampus.mini9.domain.accommodation.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodat
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.util.AccommodationServiceMapper;
+import com.fastcampus.mini9.domain.member.entity.Member;
 import com.fastcampus.mini9.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -53,9 +55,13 @@ public class AccommodationService implements AccommodationQuery {
 		);
 
 		// TODO: 현재 로그인 상태면 검색된 accommodation에 좋아요 표시. 1안:UserPrincipal->Member. 2안:MemberService에 구현. 3안: 여기에 구현
-		// Optional<Member> loginMember = memberRepository.findById(userPrincipal.id());
-		// if(loginMember.isPresent()) {
-		// }
+		Optional<Member> loginMember = memberRepository.findById(userPrincipal.id());
+		if (loginMember.isPresent()) {
+			Page<SearchAccommodation> result = all
+				.map(Accommodation -> SearchAccommodation.fromEntity(Accommodation, loginMember.get()));
+			return new SearchAccommodationsResponse(result.toList(), result.getNumber(), result.getSize(),
+				result.getTotalPages(), result.getTotalElements(), result.isFirst(), result.isLast());
+		}
 
 		List<SearchAccommodation> accommodationResponses = mapper.entityListToResponseList(all.toList());
 		return new SearchAccommodationsResponse(accommodationResponses,

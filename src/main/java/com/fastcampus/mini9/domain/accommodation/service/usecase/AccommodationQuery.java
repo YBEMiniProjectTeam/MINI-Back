@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
+import com.fastcampus.mini9.domain.member.entity.Member;
 
 public interface AccommodationQuery {
 	SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest request, UserPrincipal userPrincipal);
@@ -46,6 +48,21 @@ public interface AccommodationQuery {
 		String thumbnail,
 		Integer min_price
 	) {
+		public static SearchAccommodation fromEntity(Accommodation accommodation, Member member) {
+			return new SearchAccommodation(
+				accommodation.getId(),
+				accommodation.getName(),
+				accommodation.getType(),
+				accommodation.getLocation().getRegion().getName(),
+				accommodation.getLocation().getDistrict().getName(),
+				accommodation.getCheckIn().toString(),
+				accommodation.getCheckOut().toString(),
+				member.getWishList().stream()
+					.anyMatch(Wish -> Wish.getMember().equals(member)),
+				accommodation.getThumbnail(),
+				accommodation.getMinPrice()
+				);
+		}
 	}
 
 	record FindAccommodationRequest(

@@ -26,6 +26,7 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 		this.jpaQueryFactory = jpaQueryFactory;
 	}
 
+	// TODO: stock 없는 데이터 필터링
 	@Override
 	public Page<Accommodation> searchByConditions(
 		String regionReq, String districtReq,
@@ -36,12 +37,12 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 		List<Accommodation> content = jpaQueryFactory
 			.select(accommodation)
 			.from(accommodation)
-			.join(stock)
-			.on(
-				stock.room.in(accommodation.rooms),
-				dateBetween(startDateReq, endDateReq),
-				stock.quantity.gt(0)
-			)
+			// .join(stock)
+			// .on(
+			// 	stock.room.in(accommodation.rooms),
+			// 	dateBetween(startDateReq, endDateReq),
+			// 	stock.quantity.gt(0)
+			// )
 			.where(
 				locationEq(regionReq, districtReq),
 				categoryEq(categoryReq),
@@ -51,20 +52,23 @@ public class AccommodationQueryDslRepositoryImpl implements AccommodationQueryDs
 			.limit(pageReq.getPageSize())
 			.fetch();
 
+		System.out.println(content.size());
+
 		JPAQuery<Long> countQuery = jpaQueryFactory
 			.select(accommodation.count())
 			.from(accommodation)
-			.join(stock)
-			.on(
-				stock.room.in(accommodation.rooms),
-				dateBetween(startDateReq, endDateReq),
-				stock.quantity.gt(0)
-			)
+			// .join(stock)
+			// .on(
+			// 	stock.room.in(accommodation.rooms),
+			// 	dateBetween(startDateReq, endDateReq),
+			// 	stock.quantity.gt(0)
+			// )
 			.where(
 				locationEq(regionReq, districtReq),
 				categoryEq(categoryReq),
 				keywordEq(keywordReq)
 			);
+
 
 		return PageableExecutionUtils.getPage(content, pageReq, countQuery::fetchOne);
 	}

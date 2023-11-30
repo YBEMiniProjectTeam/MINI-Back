@@ -58,7 +58,7 @@ public interface AccommodationQuery {
 				accommodation.getCheckIn().toString(),
 				accommodation.getCheckOut().toString(),
 				member.getWishList().stream()
-					.anyMatch(Wish -> Wish.getMember().equals(member)),
+					.anyMatch(Wish -> Wish.getAccommodation().equals(accommodation)),
 				accommodation.getThumbnail(),
 				accommodation.getMinPrice()
 				);

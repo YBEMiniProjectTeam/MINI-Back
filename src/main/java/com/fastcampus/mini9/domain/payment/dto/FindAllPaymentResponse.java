@@ -3,6 +3,7 @@ package com.fastcampus.mini9.domain.payment.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fastcampus.mini9.domain.payment.entity.PaymentStatus;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -14,6 +15,9 @@ public record FindAllPaymentResponse(
 	@Schema(example = "조선 호텔 (숙소명)")
 	String accommodationName,
 
+	@Schema(example = "결제 상태")
+	PaymentStatus paymentStatus,
+	
 	FindAllPaymentResponse.RoomInfo roomInfo) {
 
 	public record RoomInfo(

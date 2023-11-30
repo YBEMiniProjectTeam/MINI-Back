@@ -19,5 +19,6 @@ public interface PaymentDtoMapper {
 	@Mapping(source = "payment.reservation.guestName", target = "guestName")
 	@Mapping(source = "payment.reservation.guestEmail", target = "guestEmail")
 	@Mapping(source = "payment.price", target = "price")
+	@Mapping(source = "payment.status", target = "paymentStatus")
 	FindDetailPaymentResponse paymentToDetailResponse(Payment payment);
 }

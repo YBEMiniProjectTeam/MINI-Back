@@ -1,13 +1,15 @@
 <div align="center">
 
-## 🔗 배포 링크
+## 🔗배포 링크
 <a href="https://mini-front-git-develop-saveme9.vercel.app/?_vercel_share=2ikskxGfMJOHAcnQZXPztaJDBYazlTJO" target="_blank">
 <img src="https://img.shields.io/badge/NINE STAY-111111?style=for-the-badge&logo=houzz&logoColor=white"/></a>
-<a href="https://github.com/YBEMiniProjectTeam/MINI-Front" target="_blank">
+
+## 🔗 Repository 링크
+<a href="https://github.com/YBEMiniProjectTeam/MINI-Back" target="_blank">
 <img src="https://img.shields.io/badge/원본 repository-d53f8c?style=for-the-badge&logo=github&logoColor=white"/></a>
 <br><br>
-<a href="https://github.com/YBEMiniProjectTeam/MINI-Back" target="_blank">
-<img src="https://img.shields.io/badge/BE repository-dfdfdf?style=for-the-badge&logo=github&logoColor=666666"/></a>
+<a href="https://github.com/YBEMiniProjectTeam/MINI-Front" target="_blank">
+<img src="https://img.shields.io/badge/FE repository-dfdfdf?style=for-the-badge&logo=github&logoColor=666666"/></a>
 
 <br/><br/><br/>
 
@@ -99,8 +101,13 @@
 <br/><br/><br/>  
 
 ## 🔗 프로젝트 구조
-<img width="600px" src="structure.png" />  
+<img width="600px" src="img/structure.png" />
 
+### ERD
+<img width="600px" src="img/erd.JPG" />  
+
+### API
+<img width="600px" src="img/swagger.jpg" />
 
 ## ✨ 구현 내용
 ### 회원가입 / 로그인

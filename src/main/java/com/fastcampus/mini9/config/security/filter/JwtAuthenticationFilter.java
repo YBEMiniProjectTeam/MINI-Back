@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		.getContextHolderStrategy();
 
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
-		AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
+								   AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
 		this.authenticationManager = authenticationManager;
 		this.authenticationDetailsSource = authenticationDetailsSource;
 	}
@@ -95,7 +95,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	protected void onSuccessfulAuthentication(HttpServletRequest request,
-		HttpServletResponse response, Authentication authResult) {
+											  HttpServletResponse response, Authentication authResult) {
 		if (authResult instanceof JwtAuthenticationToken jwtAuthToken
 			&& jwtAuthToken.isRegenerated()) {
 			CookieUtil.addCookieWithoutHttp(response, "access-token", jwtAuthToken.getNewAccessToken(),
@@ -106,7 +106,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	protected void onUnsuccessfulAuthentication(HttpServletRequest request,
-		HttpServletResponse response, AuthenticationException failed) {
+												HttpServletResponse response, AuthenticationException failed) {
 	}
 
 	public String resolveToken(String authorization) {

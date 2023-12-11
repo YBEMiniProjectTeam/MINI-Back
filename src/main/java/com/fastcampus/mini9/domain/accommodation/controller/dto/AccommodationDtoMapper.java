@@ -16,6 +16,7 @@ import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoom
 
 /**
  * 사용방법
+ *
  * @Mapping(source = "numberOfSeats", target = "seatCount")
  * CarDto carToCarDto(Car car);
  */

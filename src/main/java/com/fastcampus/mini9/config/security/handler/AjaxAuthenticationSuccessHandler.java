@@ -27,14 +27,14 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 	private final RefreshTokenService refreshTokenService;
 
 	public AjaxAuthenticationSuccessHandler(JwtProvider jwtProvider,
-		RefreshTokenService refreshTokenService) {
+											RefreshTokenService refreshTokenService) {
 		this.jwtProvider = jwtProvider;
 		this.refreshTokenService = refreshTokenService;
 	}
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-		Authentication authentication)
+										Authentication authentication)
 		throws IOException, ServletException {
 		// access-token
 		String accessToken = jwtProvider.generateAccessToken(authentication);
@@ -42,8 +42,8 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 		CookieUtil.addCookieWithoutHttp(response, "access-token", accessToken, 60 * 30);
 
 		// refresh-token
-		UserPrincipal principal = (UserPrincipal)authentication.getPrincipal();
-		AuthenticationDetails details = (AuthenticationDetails)authentication.getDetails();
+		UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+		AuthenticationDetails details = (AuthenticationDetails) authentication.getDetails();
 		String refreshTokenValue = refreshTokenService.updateRefreshToken(principal, details);
 
 		CookieUtil.addCookie(response, "refresh-token", refreshTokenValue, 60 * 60 * 24);

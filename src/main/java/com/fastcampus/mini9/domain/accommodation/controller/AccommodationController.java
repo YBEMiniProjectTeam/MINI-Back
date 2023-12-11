@@ -115,8 +115,9 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
 	public DataResponseBody<GetRoomsResponse> getRooms(@PathVariable Long accommodationId,
-		@RequestParam(name = "start_date") LocalDate startDate, @RequestParam(name = "end_date") LocalDate endDate,
-		@RequestParam(name = "guest_num") Long guestNum) {
+													   @RequestParam(name = "start_date") LocalDate startDate,
+													   @RequestParam(name = "end_date") LocalDate endDate,
+													   @RequestParam(name = "guest_num") Long guestNum) {
 		FindRoomsInAccommodationRequest findRequest = new FindRoomsInAccommodationRequest(accommodationId, startDate,
 			endDate, guestNum);
 		FindRoomsInAccommodationResponse findResult = roomQuery.findRoomsInAccommodation(findRequest);

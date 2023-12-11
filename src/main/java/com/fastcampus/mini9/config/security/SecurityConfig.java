@@ -178,7 +178,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AjaxAuthenticationProvider authenticationProvider(AuthenticationManagerBuilder auth,
-		JwtProvider jwtProvider) {
+															 JwtProvider jwtProvider) {
 		AjaxAuthenticationProvider ajaxAuthenticationProvider = new AjaxAuthenticationProvider(
 			ajaxUserDetailService(), passwordEncoder());
 		auth.authenticationProvider(ajaxAuthenticationProvider).authenticationProvider(jwtProvider);

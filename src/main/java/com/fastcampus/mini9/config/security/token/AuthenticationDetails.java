@@ -56,7 +56,7 @@ public class AuthenticationDetails extends WebAuthenticationDetails {
 		if (!super.equals(o)) {
 			return false;
 		}
-		AuthenticationDetails that = (AuthenticationDetails)o;
+		AuthenticationDetails that = (AuthenticationDetails) o;
 		return Objects.equals(clientIp, that.clientIp) && Objects.equals(userAgent,
 			that.userAgent);
 	}

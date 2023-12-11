@@ -43,10 +43,10 @@ public class JwtProvider implements AuthenticationProvider {
 	private long accessTokenValidityInMs;
 
 	public JwtProvider(@Value("${jwt.secret-key}") String secretKey,
-		@Value("${jwt.issuer}") String issuer,
-		@Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
-		RefreshTokenService refreshTokenService,
-		@Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
+					   @Value("${jwt.issuer}") String issuer,
+					   @Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
+					   RefreshTokenService refreshTokenService,
+					   @Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
 		this.algorithm = Algorithm.HMAC256(secretKey);
 		this.issuer = issuer;
 		this.accessTokenValidityInMs = accessTokenValidityInMs;
@@ -76,8 +76,8 @@ public class JwtProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication)
 		throws AuthenticationException {
-		String accessTokenValue = (String)authentication.getPrincipal();
-		String refreshTokenValue = (String)authentication.getCredentials();
+		String accessTokenValue = (String) authentication.getPrincipal();
+		String refreshTokenValue = (String) authentication.getCredentials();
 		JwtAuthenticationToken authResult = null;
 		try {
 			DecodedJWT decodedJwt = verifier.verify(accessTokenValue);
@@ -90,7 +90,7 @@ public class JwtProvider implements AuthenticationProvider {
 			UserPrincipal userPrincipal = decodedJwt.getClaim("authn").as(UserPrincipal.class);
 			List<SimpleGrantedAuthority> authorities = decodedJwt.getClaim("authgr")
 				.asList(SimpleGrantedAuthority.class);
-			AuthenticationDetails details = (AuthenticationDetails)authentication.getDetails();
+			AuthenticationDetails details = (AuthenticationDetails) authentication.getDetails();
 			boolean isValidRefreshToken = refreshTokenService.isValidRefreshToken(refreshTokenValue,
 				userPrincipal, details);
 			if (isValidRefreshToken) {

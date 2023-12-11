@@ -17,7 +17,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 	private final PasswordEncoder passwordEncoder;
 
 	public AjaxAuthenticationProvider(AjaxUserDetailService userDetailService,
-		PasswordEncoder passwordEncoder) {
+									  PasswordEncoder passwordEncoder) {
 		this.userDetailService = userDetailService;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -26,8 +26,8 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication)
 		throws AuthenticationException {
 		String username = authentication.getName();
-		String password = (String)authentication.getCredentials();
-		UserDetailsWithId userDetails = (UserDetailsWithId)userDetailService.loadUserByUsername(
+		String password = (String) authentication.getCredentials();
+		UserDetailsWithId userDetails = (UserDetailsWithId) userDetailService.loadUserByUsername(
 			username);
 		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 			throw new BadCredentialsException("BadCredentialsException");

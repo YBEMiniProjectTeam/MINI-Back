@@ -16,6 +16,7 @@ public interface AccommodationQueryDslRepository {
 	 * 4.details정보까지 fetchJoin해서
 	 * 5.페이지네이션
 	 * TODO: isStock, isWish를 가진 dto를 반환하게 변경
+	 *
 	 * @param region
 	 * @param district
 	 * @param startDate

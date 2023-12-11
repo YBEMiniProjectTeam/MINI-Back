@@ -26,18 +26,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
-		.getContextHolderStrategy();
-
+	private static final String grantType = "Bearer";
 	private final AuthenticationManager authenticationManager;
 	private final AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource;
+	private SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
+		.getContextHolderStrategy();
 
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
 		AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
 		this.authenticationManager = authenticationManager;
 		this.authenticationDetailsSource = authenticationDetailsSource;
 	}
-	private static final String grantType = "Bearer";
 
 	@Override
 	public void afterPropertiesSet() {
@@ -58,10 +57,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 			return;
 		}
-        String authHeader = request.getHeader("Authorization");
+		String authHeader = request.getHeader("Authorization");
 		String accessToken = resolveToken(authHeader);
-        Optional<Cookie> refreshToken = CookieUtil.getCookie(request, "refresh-token");
-        if (accessToken != null) {
+		Optional<Cookie> refreshToken = CookieUtil.getCookie(request, "refresh-token");
+		if (accessToken != null) {
 			JwtAuthenticationToken jwtAuth = JwtAuthenticationToken.unauthenticated(
 				accessToken,
 				refreshToken.isPresent() ? refreshToken.get().getValue() : "empty");

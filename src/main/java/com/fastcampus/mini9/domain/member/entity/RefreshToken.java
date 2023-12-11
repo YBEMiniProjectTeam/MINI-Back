@@ -17,28 +17,28 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RefreshToken {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private Long userId;
+	private Long userId;
 
-    @Column(unique = true)
-    private String tokenValue;
+	@Column(unique = true)
+	private String tokenValue;
 
-    private String clientIp;
+	private String clientIp;
 
-    private String userAgent;
+	private String userAgent;
 
-    public RefreshToken(Long userId, String tokenValue, String clientIp, String userAgent) {
-        this.userId = userId;
-        this.tokenValue = tokenValue;
-        this.clientIp = clientIp;
-        this.userAgent = userAgent;
-    }
+	public RefreshToken(Long userId, String tokenValue, String clientIp, String userAgent) {
+		this.userId = userId;
+		this.tokenValue = tokenValue;
+		this.clientIp = clientIp;
+		this.userAgent = userAgent;
+	}
 
-    public void update(Long userId, String tokenValue) {
-        this.userId = userId;
-        this.tokenValue = tokenValue;
-    }
+	public void update(Long userId, String tokenValue) {
+		this.userId = userId;
+		this.tokenValue = tokenValue;
+	}
 }

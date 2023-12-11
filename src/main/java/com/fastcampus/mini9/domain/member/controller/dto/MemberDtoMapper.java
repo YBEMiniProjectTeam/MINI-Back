@@ -1,12 +1,13 @@
 package com.fastcampus.mini9.domain.member.controller.dto;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+
 import com.fastcampus.mini9.domain.member.controller.dto.request.SignupRequestDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberInfoResponseDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberSaveResponseDto;
 import com.fastcampus.mini9.domain.member.service.dto.request.MemberSaveDto;
 import com.fastcampus.mini9.domain.member.service.dto.response.MemberDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
 
 /**
  * 사용방법
@@ -17,9 +18,9 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface MemberDtoMapper {
 
-    MemberSaveDto signupTomMemberSave(SignupRequestDto dto);
+	MemberSaveDto signupTomMemberSave(SignupRequestDto dto);
 
-    MemberSaveResponseDto memberToMemberSaveResponse(MemberDto dto);
+	MemberSaveResponseDto memberToMemberSaveResponse(MemberDto dto);
 
-    MemberInfoResponseDto memberToMemberInfoResponse(MemberDto dto);
+	MemberInfoResponseDto memberToMemberInfoResponse(MemberDto dto);
 }

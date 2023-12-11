@@ -17,7 +17,7 @@ public record FindAllPaymentResponse(
 
 	@Schema(example = "결제 상태")
 	PaymentStatus paymentStatus,
-	
+
 	FindAllPaymentResponse.RoomInfo roomInfo) {
 
 	public record RoomInfo(

@@ -16,6 +16,7 @@ public record GetRoomsResponse(
 	) {
 
 	}
+
 	public record GetRoomDescription(
 		boolean airConditioner,
 		boolean bathFacility,

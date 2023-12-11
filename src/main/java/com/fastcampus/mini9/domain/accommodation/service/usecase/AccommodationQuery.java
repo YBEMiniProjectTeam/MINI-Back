@@ -61,7 +61,7 @@ public interface AccommodationQuery {
 					.anyMatch(Wish -> Wish.getAccommodation().equals(accommodation)),
 				accommodation.getThumbnail(),
 				accommodation.getMinPrice()
-				);
+			);
 		}
 	}
 

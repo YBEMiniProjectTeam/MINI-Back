@@ -46,8 +46,9 @@ public class CartService {
 	private final PaymentRepository paymentRepository;
 
 	public List<FindCartResponse> findCarts(Long memberId) {
-		Map<Long, List<Cart>> cartsByAccommodationId = cartRepository.findByMemberId(memberId).stream()
-			.collect(Collectors.groupingBy(cart -> cart.getRoom().getAccommodation().getId()));
+		Map<Long, List<Cart>> cartsByAccommodationId =
+			cartRepository.findByMemberId(memberId).stream()
+				.collect(Collectors.groupingBy(cart -> cart.getRoom().getAccommodation().getId()));
 
 		return cartsByAccommodationId.values().stream()
 			.map(this::mapToFindCartResponse)
@@ -89,8 +90,9 @@ public class CartService {
 
 		// TODO: 체크인, 체크아웃 날짜 검증
 
-		Optional<Cart> optionalCart = cartRepository.findByCheckInDateAndCheckOutDateAndMemberIdAndRoomId(
-			dto.checkInDate(), dto.checkOutDate(), member.getId(), room.getId());
+		Optional<Cart> optionalCart =
+			cartRepository.findByCheckInDateAndCheckOutDateAndMemberIdAndRoomId(
+				dto.checkInDate(), dto.checkOutDate(), member.getId(), room.getId());
 
 		if (optionalCart.isEmpty()) {
 			Cart cart = cartRepository.save(Cart.builder()
@@ -180,8 +182,10 @@ public class CartService {
 			// 예약 생성
 			Reservation reservation = Reservation.builder()
 				.member(member)
-				.checkIn(cart.getCheckInDate().atTime(cart.getRoom().getAccommodation().getCheckIn()))
-				.checkOut(cart.getCheckOutDate().atTime(cart.getRoom().getAccommodation().getCheckOut()))
+				.checkIn(
+					cart.getCheckInDate().atTime(cart.getRoom().getAccommodation().getCheckIn()))
+				.checkOut(
+					cart.getCheckOutDate().atTime(cart.getRoom().getAccommodation().getCheckOut()))
 				.guestName(dto.guestName())
 				.guestEmail(dto.guestEmail())
 				.reservationNo(UUID.randomUUID().toString())
@@ -207,7 +211,8 @@ public class CartService {
 			Accommodation accommodation = room.getAccommodation();
 
 			findPaymentResponses.add(
-				new FindPaymentResponse(member.getName(), member.getEmail(), reservation.getGuestName(),
+				new FindPaymentResponse(member.getName(), member.getEmail(),
+					reservation.getGuestName(),
 					reservation.getGuestEmail(), accommodation.getName(), accommodation.getType(),
 					accommodation.getThumbnail(),
 					new FindPaymentResponse.FindPaymentRoomInfo(room.getName(), payment.getPrice(),

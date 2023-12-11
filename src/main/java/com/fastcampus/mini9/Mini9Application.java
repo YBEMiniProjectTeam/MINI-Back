@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 public class Mini9Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Mini9Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Mini9Application.class, args);
+	}
 
 }

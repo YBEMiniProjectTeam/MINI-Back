@@ -34,18 +34,18 @@ public class PaymentService {
 		return payments.stream()
 			.filter(payment -> payment.getMember().getId().equals(userId))
 			.map(payment -> {
-			Room room = payment.getRoom();
-			Reservation reservation = payment.getReservation();
+				Room room = payment.getRoom();
+				Reservation reservation = payment.getReservation();
 
-			if (room == null || reservation == null) {
-				throw new NoSuchElementException();
-			}
-			return new FindAllPaymentResponse(room.getAccommodation().getName(), payment.getStatus(),
-				new FindAllPaymentResponse.RoomInfo(
-					payment.getId(), room.getName(), reservation.getCheckIn(), reservation.getCheckOut(),
-					payment.getPayAt(), room.getAccommodation().getThumbnail()
-				));
-		}).collect(Collectors.toList());
+				if (room == null || reservation == null) {
+					throw new NoSuchElementException();
+				}
+				return new FindAllPaymentResponse(room.getAccommodation().getName(), payment.getStatus(),
+					new FindAllPaymentResponse.RoomInfo(
+						payment.getId(), room.getName(), reservation.getCheckIn(), reservation.getCheckOut(),
+						payment.getPayAt(), room.getAccommodation().getThumbnail()
+					));
+			}).collect(Collectors.toList());
 	}
 
 	public FindDetailPaymentResponse findDetail(Long paymentId) {

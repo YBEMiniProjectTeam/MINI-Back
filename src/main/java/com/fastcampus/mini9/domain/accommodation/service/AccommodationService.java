@@ -28,7 +28,7 @@ public class AccommodationService implements AccommodationQuery {
 
 	@Override
 	public SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest searchAccommodationsRequest,
-															 UserPrincipal userPrincipal) {
+		UserPrincipal userPrincipal) {
 		String region = searchAccommodationsRequest.region();
 		String district = searchAccommodationsRequest.district();
 		LocalDate startDate = searchAccommodationsRequest.startDate() != null ?

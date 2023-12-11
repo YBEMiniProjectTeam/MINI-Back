@@ -19,7 +19,7 @@ public class AjaxAuthenticationToken extends AbstractAuthenticationToken {
 	}
 
 	public AjaxAuthenticationToken(Object principal, Object credentials,
-								   Collection<? extends GrantedAuthority> authorities) {
+		Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
 		this.principal = principal;
 		this.credentials = credentials;
@@ -31,7 +31,7 @@ public class AjaxAuthenticationToken extends AbstractAuthenticationToken {
 	}
 
 	public static AjaxAuthenticationToken authenticated(Object principal, Object credentials,
-														Collection<? extends GrantedAuthority> authorities) {
+		Collection<? extends GrantedAuthority> authorities) {
 		return new AjaxAuthenticationToken(principal, credentials, authorities);
 	}
 

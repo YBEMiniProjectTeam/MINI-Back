@@ -42,7 +42,7 @@ public class CartController {
 	@Operation(summary = "장바구니 객실 담기")
 	@PostMapping
 	public BaseResponseBody createCart(@RequestBody CreateCartRequest createCartRequest,
-									   @AuthenticationPrincipal UserPrincipal userPrincipal) {
+		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		cartService.addCart(createCartRequest, userPrincipal.id());
 
 		return BaseResponseBody.success();
@@ -98,7 +98,7 @@ public class CartController {
 	@Operation(summary = "바로 결제 버튼")
 	@PostMapping("/orders/payments-eager")
 	public BaseResponseBody createOrdersEager(@RequestBody CreateCartRequest createCartRequest,
-											  @AuthenticationPrincipal UserPrincipal userPrincipal) {
+		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		Long cartId = cartService.addCart(createCartRequest, userPrincipal.id());
 
 		return DataResponseBody.success(cartService.findOrders(new CartIdsRequest(List.of(cartId))), "SUCCESS");

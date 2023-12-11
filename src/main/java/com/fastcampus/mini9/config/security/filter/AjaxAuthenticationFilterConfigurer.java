@@ -22,7 +22,7 @@ public class AjaxAuthenticationFilterConfigurer extends
 	private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource;
 
 	public AjaxAuthenticationFilterConfigurer(AjaxAuthenticationFilter authenticationFilter,
-											  String defaultLoginProcessingUrl) {
+		String defaultLoginProcessingUrl) {
 		super(authenticationFilter, defaultLoginProcessingUrl);
 	}
 

@@ -23,7 +23,7 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-										AuthenticationException exception)
+		AuthenticationException exception)
 		throws IOException, ServletException {
 		response.setStatus(HttpStatus.OK.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);

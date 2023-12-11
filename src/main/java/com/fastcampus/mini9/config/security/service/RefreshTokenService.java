@@ -23,7 +23,7 @@ public class RefreshTokenService {
 	}
 
 	public boolean isValidRefreshToken(String tokenValue, UserPrincipal principal,
-									   AuthenticationDetails details) throws RefreshTokenException {
+		AuthenticationDetails details) throws RefreshTokenException {
 		RefreshToken findRefreshToken = refreshTokenRepository.findByTokenValue(tokenValue)
 			.orElseThrow(() -> new RefreshTokenException("No Such RefreshToken"));
 		return findRefreshToken.getUserId().equals(principal.id())

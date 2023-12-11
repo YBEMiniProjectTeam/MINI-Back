@@ -27,14 +27,14 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 	private final RefreshTokenService refreshTokenService;
 
 	public AjaxAuthenticationSuccessHandler(JwtProvider jwtProvider,
-											RefreshTokenService refreshTokenService) {
+		RefreshTokenService refreshTokenService) {
 		this.jwtProvider = jwtProvider;
 		this.refreshTokenService = refreshTokenService;
 	}
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-										Authentication authentication)
+		Authentication authentication)
 		throws IOException, ServletException {
 		// access-token
 		String accessToken = jwtProvider.generateAccessToken(authentication);

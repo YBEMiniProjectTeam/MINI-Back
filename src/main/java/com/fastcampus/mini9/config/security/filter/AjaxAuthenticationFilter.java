@@ -26,7 +26,7 @@ public class AjaxAuthenticationFilter extends AbstractAuthenticationProcessingFi
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
-												HttpServletResponse response) throws
+		HttpServletResponse response) throws
 		AuthenticationException, IOException, ServletException {
 		//boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 		//if (!isAjax) {

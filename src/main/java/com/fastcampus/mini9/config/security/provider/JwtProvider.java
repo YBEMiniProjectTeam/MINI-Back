@@ -43,10 +43,10 @@ public class JwtProvider implements AuthenticationProvider {
 	private long accessTokenValidityInMs;
 
 	public JwtProvider(@Value("${jwt.secret-key}") String secretKey,
-					   @Value("${jwt.issuer}") String issuer,
-					   @Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
-					   RefreshTokenService refreshTokenService,
-					   @Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
+		@Value("${jwt.issuer}") String issuer,
+		@Value("${jwt.access-token-expire-time}") long accessTokenValidityInMs,
+		RefreshTokenService refreshTokenService,
+		@Value("${jwt.refresh-token-expire-time}") long refreshTokenValidityInMs) {
 		this.algorithm = Algorithm.HMAC256(secretKey);
 		this.issuer = issuer;
 		this.accessTokenValidityInMs = accessTokenValidityInMs;

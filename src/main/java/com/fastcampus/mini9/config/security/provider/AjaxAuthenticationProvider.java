@@ -17,7 +17,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 	private final PasswordEncoder passwordEncoder;
 
 	public AjaxAuthenticationProvider(AjaxUserDetailService userDetailService,
-									  PasswordEncoder passwordEncoder) {
+		PasswordEncoder passwordEncoder) {
 		this.userDetailService = userDetailService;
 		this.passwordEncoder = passwordEncoder;
 	}

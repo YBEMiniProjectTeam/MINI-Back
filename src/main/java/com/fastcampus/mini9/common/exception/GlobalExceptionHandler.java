@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ErrorResponseBody> handleConstraintViolationException(ConstraintViolationException ex) {
+	public ResponseEntity<ErrorResponseBody> handleException(ConstraintViolationException ex) {
 		logger.warn("Validation error", ex);
 		String errorMessage = ex.getMessage();
 		return ResponseEntity
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ErrorResponseBody> handleIllegalArgumentException(IllegalArgumentException ex) {
+	public ResponseEntity<ErrorResponseBody> handleException(IllegalArgumentException ex) {
 		logger.warn("Invalid argument", ex);
 		String errorMessage = ex.getMessage();
 		return ResponseEntity
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<ErrorResponseBody> handleMissingParams(MissingServletRequestParameterException ex) {
+	public ResponseEntity<ErrorResponseBody> handleException(MissingServletRequestParameterException ex) {
 		String errorMessage = ex.getParameterName() + " 를 필수로 입력해주셔야 합니다.";
 		return ResponseEntity
 			.badRequest()

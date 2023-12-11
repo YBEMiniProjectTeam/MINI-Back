@@ -97,7 +97,7 @@ public class CartController {
 	public DataResponseBody<List<FindPaymentResponse>> findRecentOrders(
 		@AuthenticationPrincipal UserPrincipal userPrincipal,
 		@RequestParam @Min(value = 1, message = "count는 1 이상이여야 합니다.") int count) {
-	return DataResponseBody.success(cartService.findRecentOrders(userPrincipal.id(), count), "SUCCESS");
+		return DataResponseBody.success(cartService.findRecentOrders(userPrincipal.id(), count), "SUCCESS");
 	}
 
 	@Operation(summary = "바로 결제 버튼")

@@ -1,6 +1,6 @@
 package com.fastcampus.mini9.common.exception;
 
-public class EntityNotFoundException extends BaseException{
+public class EntityNotFoundException extends BaseException {
 	public EntityNotFoundException() {
 		super(ErrorCode.EntityNotFound.getMsg(), ErrorCode.EntityNotFound);
 	}

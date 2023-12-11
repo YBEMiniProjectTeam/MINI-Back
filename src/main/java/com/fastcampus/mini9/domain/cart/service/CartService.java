@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.mini9.common.exception.EntityNotFoundException;
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.repository.RoomRepository;
@@ -24,6 +25,7 @@ import com.fastcampus.mini9.domain.cart.dto.FindCartResponse;
 import com.fastcampus.mini9.domain.cart.entity.Cart;
 import com.fastcampus.mini9.domain.cart.repository.CartRepository;
 import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.exception.NotFoundMemberException;
 import com.fastcampus.mini9.domain.member.repository.MemberRepository;
 import com.fastcampus.mini9.domain.payment.entity.Payment;
 import com.fastcampus.mini9.domain.payment.entity.PaymentStatus;
@@ -85,8 +87,10 @@ public class CartService {
 
 	@Transactional
 	public Long addCart(CreateCartRequest dto, Long id) {
-		Member member = memberRepository.findById(id).orElseThrow();
-		Room room = roomRepository.findById(dto.roomId()).orElseThrow();
+		Member member = memberRepository.findById(id)
+			.orElseThrow(NotFoundMemberException::new);
+		Room room = roomRepository.findById(dto.roomId())
+			.orElseThrow(() -> new EntityNotFoundException("해당 객실을 찾을 수 없습니다."));
 
 		// TODO: 체크인, 체크아웃 날짜 검증
 
@@ -157,7 +161,8 @@ public class CartService {
 
 		// TODO: 숙박일 검증
 
-		Member member = memberRepository.findById(memberId).orElseThrow();
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(NotFoundMemberException::new);
 		List<Cart> carts = cartRepository.findAllById(dto.cartIds());
 
 		if (carts.size() != dto.cartIds().size()) {

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CartIdRequest(
 
-	@NotNull
-	@Min(1)
+	@NotNull(message = "cart_id는 필수로 입력되어야 합니다.")
+	@Min(value = 1, message = "cart_id는 최소 1 이상이어야 합니다.")
 	Long cartId) {
 }

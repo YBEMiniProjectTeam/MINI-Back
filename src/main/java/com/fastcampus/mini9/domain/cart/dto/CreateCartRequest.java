@@ -9,12 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CreateCartRequest(
 
-	@NotNull
+	@NotBlank(message = "room_id는 필수로 입력하셔야 합니다.")
 	@Min(value = 1, message = "room_id는 최소 1 이상이어야 합니다.")
 	Long roomId,
 

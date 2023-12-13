@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.mini9.common.exception.EntityNotFoundException;
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
@@ -25,7 +26,8 @@ public class RoomService implements RoomQuery {
 
 	@Override
 	public FindRoomsInAccommodationResponse findRoomsInAccommodation(FindRoomsInAccommodationRequest request) {
-		Accommodation accommodation = accommodationRepository.findById(request.accommodationId()).orElseThrow();
+		Accommodation accommodation = accommodationRepository.findById(request.accommodationId())
+			.orElseThrow(() -> new EntityNotFoundException("해당 숙소를 찾을 수 없습니다."));
 
 		List<RoomResponse> responseList = accommodation.getRooms().stream()
 			.filter(Room -> Room.getCapacityMax() >= (request.guestNum() == null ? Room.getCapacityMax() :
@@ -46,7 +48,8 @@ public class RoomService implements RoomQuery {
 
 	@Override
 	public FindRoomResponse findRoom(FindRoomRequest request) {
-		Room room = roomRepository.findById(request.roomId()).orElseThrow();
+		Room room = roomRepository.findById(request.roomId())
+			.orElseThrow(() -> new EntityNotFoundException("해당 객실을 찾을 수 없습니다."));
 		FindRoomResponse response = mapper.entityToFind(room);
 		return response;
 	}

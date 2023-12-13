@@ -5,7 +5,9 @@ import static com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuer
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +29,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class AccommodationController {
 
 	private final AccommodationQuery accommodationQuery;
@@ -56,12 +60,14 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations")
 	public DataResponseBody<GetAccommodationsResponse> getAccommodations(
-		@RequestParam(required = false) String region, @RequestParam(required = false) String district,
-		@RequestParam(required = false, name = "start_date") LocalDate startDate,
-		@RequestParam(required = false, name = "end_date") LocalDate endDate,
-		@RequestParam(required = false) String category, @RequestParam(required = false) String keyword,
-		@RequestParam(name = "page_num", defaultValue = "1") Integer pageNum,
-		@RequestParam(name = "page_size", defaultValue = "10") Integer pageSize,
+		@RequestParam(required = false) String region,
+		@RequestParam(required = false) String district,
+		@RequestParam(required = false, name = "start_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+		@RequestParam(required = false, name = "end_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+		@RequestParam(required = false) String category,
+		@RequestParam(required = false) String keyword,
+		@RequestParam(name = "page_num", defaultValue = "1") @Min(value = 1, message = "page_num은 최소 1 이상이여야 합니다.") Integer pageNum,
+		@RequestParam(name = "page_size", defaultValue = "10") @Min(value = 1, message = "page_size는 최소 1 이상이여야 합니다.") Integer pageSize,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		SearchAccommodationsRequest searchRequest = new SearchAccommodationsRequest(region, district, startDate,
 			endDate, category, keyword, pageNum, pageSize);
@@ -115,9 +121,9 @@ public class AccommodationController {
 	})
 	@GetMapping("/accommodations/{accommodationId}/rooms")
 	public DataResponseBody<GetRoomsResponse> getRooms(@PathVariable Long accommodationId,
-		@RequestParam(name = "start_date") LocalDate startDate,
-		@RequestParam(name = "end_date") LocalDate endDate,
-		@RequestParam(name = "guest_num") Long guestNum) {
+		@RequestParam(name = "start_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+		@RequestParam(name = "end_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+		@RequestParam(name = "guest_num") @Min(value = 1, message = "guest_num은 최소 1 이상이여야 합니다.") Long guestNum) {
 		FindRoomsInAccommodationRequest findRequest = new FindRoomsInAccommodationRequest(accommodationId, startDate,
 			endDate, guestNum);
 		FindRoomsInAccommodationResponse findResult = roomQuery.findRoomsInAccommodation(findRequest);

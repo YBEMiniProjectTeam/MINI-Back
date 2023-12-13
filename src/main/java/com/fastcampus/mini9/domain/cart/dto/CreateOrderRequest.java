@@ -16,10 +16,10 @@ public record CreateOrderRequest(
 	List<Long> cartIds,
 
 	@Schema(example = "박경탁 (게스트 이름)")
-	@NotBlank
+	@NotBlank(message = "guest_name을 필수로 입력해주세요.")
 	String guestName,
 
 	@Schema(example = "aaa@naver.com (게스트 이메일)")
-	@NotBlank
+	@NotBlank(message = "guest_email을 필수로 입력해주세요.")
 	String guestEmail) {
 }

@@ -9,14 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.mini9.common.exception.EntityNotFoundException;
-import com.fastcampus.mini9.config.security.token.UserPrincipal;
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.util.AccommodationServiceMapper;
 import com.fastcampus.mini9.domain.member.entity.Member;
-import com.fastcampus.mini9.domain.member.exception.NotFoundMemberException;
-import com.fastcampus.mini9.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +22,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccommodationService implements AccommodationQuery {
 	private final AccommodationRepository accommodationRepository;
-	private final MemberRepository memberRepository;
 	private final AccommodationServiceMapper mapper;
 
 	@Override
-	public SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest searchAccommodationsRequest,
-		UserPrincipal userPrincipal) {
+	public SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest searchAccommodationsRequest) {
 		String region = searchAccommodationsRequest.region();
 		String district = searchAccommodationsRequest.district();
 		LocalDate startDate = searchAccommodationsRequest.startDate() != null ?
@@ -41,6 +36,7 @@ public class AccommodationService implements AccommodationQuery {
 		String keyword = searchAccommodationsRequest.keyword();
 		Integer pageNum = searchAccommodationsRequest.pageNum();
 		Integer pageSize = searchAccommodationsRequest.pageSize();
+		Member member = searchAccommodationsRequest.member();
 
 		// TODO: 검색 쿼리(QueryDSL) 구현.
 		//  1.해당 지역에 /
@@ -56,11 +52,9 @@ public class AccommodationService implements AccommodationQuery {
 		);
 
 		// TODO: 현재 로그인 상태면 검색된 accommodation에 좋아요 표시. 1안:UserPrincipal->Member. 2안:MemberService에 구현. 3안: 여기에 구현
-		if (userPrincipal.id() != 0L) {
-			Member loginMember = memberRepository.findById(userPrincipal.id())
-				.orElseThrow(NotFoundMemberException::new);
+		if (member != null) {
 			Page<SearchAccommodation> result = all
-				.map(Accommodation -> SearchAccommodation.fromEntity(Accommodation, loginMember));
+				.map(Accommodation -> SearchAccommodation.fromEntity(Accommodation, member));
 			return new SearchAccommodationsResponse(result.toList(), result.getNumber(), result.getSize(),
 				result.getTotalPages(), result.getTotalElements(), result.isFirst(), result.isLast());
 		}

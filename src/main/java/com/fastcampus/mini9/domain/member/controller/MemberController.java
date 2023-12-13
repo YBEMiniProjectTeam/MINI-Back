@@ -16,6 +16,7 @@ import com.fastcampus.mini9.domain.member.controller.dto.request.SignupRequestDt
 import com.fastcampus.mini9.domain.member.controller.dto.response.LoginResponseDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberInfoResponseDto;
 import com.fastcampus.mini9.domain.member.controller.dto.response.MemberSaveResponseDto;
+import com.fastcampus.mini9.domain.member.entity.Member;
 import com.fastcampus.mini9.domain.member.service.MemberService;
 import com.fastcampus.mini9.domain.member.service.dto.response.MemberDto;
 
@@ -130,7 +131,7 @@ public class MemberController {
 	public DataResponseBody<MemberInfoResponseDto> memberInfo(
 		@AuthenticationPrincipal UserPrincipal principal
 	) {
-		MemberDto response = memberService.getProfile(principal.getName());
-		return DataResponseBody.success(mapper.memberToMemberInfoResponse(response));
+		Member member = memberService.findById(principal.id());
+		return DataResponseBody.success(mapper.memberToMemberInfoResponse(member));
 	}
 }

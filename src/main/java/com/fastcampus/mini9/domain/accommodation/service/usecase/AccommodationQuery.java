@@ -9,7 +9,7 @@ import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
 import com.fastcampus.mini9.domain.member.entity.Member;
 
 public interface AccommodationQuery {
-	SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest request, UserPrincipal userPrincipal);
+	SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest request);
 
 	FindAccommodationResponse findAccommodation(FindAccommodationRequest request);
 
@@ -21,7 +21,8 @@ public interface AccommodationQuery {
 		String category,
 		String keyword,
 		Integer pageNum,
-		Integer pageSize
+		Integer pageSize,
+		Member member
 	) {
 	}
 

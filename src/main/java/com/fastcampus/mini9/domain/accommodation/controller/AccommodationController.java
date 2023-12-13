@@ -23,6 +23,9 @@ import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoom
 import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetRoomsResponse;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.RoomQuery;
+import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.exception.NotFoundMemberException;
+import com.fastcampus.mini9.domain.member.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,6 +43,7 @@ public class AccommodationController {
 	private final AccommodationQuery accommodationQuery;
 	private final RoomQuery roomQuery;
 	private final AccommodationDtoMapper mapper;
+	private final MemberService memberService;
 
 	@Operation(summary = "숙소 검색")
 	@ApiResponses(value = {
@@ -69,10 +73,14 @@ public class AccommodationController {
 		@RequestParam(name = "page_num", defaultValue = "1") @Min(value = 1, message = "page_num은 최소 1 이상이여야 합니다.") Integer pageNum,
 		@RequestParam(name = "page_size", defaultValue = "10") @Min(value = 1, message = "page_size는 최소 1 이상이여야 합니다.") Integer pageSize,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
+		Member member = null;
+		try {
+			member = memberService.findById(userPrincipal.id());
+		} catch (NotFoundMemberException ignored) {
+		}
 		SearchAccommodationsRequest searchRequest = new SearchAccommodationsRequest(region, district, startDate,
-			endDate, category, keyword, pageNum, pageSize);
-		SearchAccommodationsResponse searchResult = accommodationQuery.searchAccommodations(searchRequest,
-			userPrincipal);
+			endDate, category, keyword, pageNum, pageSize, member);
+		SearchAccommodationsResponse searchResult = accommodationQuery.searchAccommodations(searchRequest);
 		GetAccommodationsResponse result = mapper.searchResultToResponseDto(searchResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}

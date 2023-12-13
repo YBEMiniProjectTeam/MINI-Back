@@ -21,6 +21,8 @@ import com.fastcampus.mini9.domain.cart.dto.CreateCartRequest;
 import com.fastcampus.mini9.domain.cart.dto.CreateOrderRequest;
 import com.fastcampus.mini9.domain.cart.dto.FindCartResponse;
 import com.fastcampus.mini9.domain.cart.service.CartService;
+import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.service.MemberService;
 import com.fastcampus.mini9.domain.reservation.dto.FindPaymentResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class CartController {
 
 	private final CartService cartService;
+	private final MemberService memberService;
 
 	@Operation(summary = "장바구니 조회")
 	@GetMapping
@@ -45,7 +48,8 @@ public class CartController {
 	@PostMapping
 	public BaseResponseBody createCart(@RequestBody @Valid CreateCartRequest createCartRequest,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		cartService.addCart(createCartRequest, userPrincipal.id());
+		Member member = memberService.findById(userPrincipal.id());
+		cartService.addCart(createCartRequest, member);
 		return BaseResponseBody.success();
 	}
 
@@ -86,7 +90,8 @@ public class CartController {
 	public BaseResponseBody createOrders(
 		@RequestBody @Valid CreateOrderRequest createOrderRequest,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		cartService.createOrder(createOrderRequest, userPrincipal.id());
+		Member member = memberService.findById(userPrincipal.id());
+		cartService.createOrder(createOrderRequest, member);
 
 		return DataResponseBody.success();
 	}
@@ -97,14 +102,16 @@ public class CartController {
 	public DataResponseBody<List<FindPaymentResponse>> findRecentOrders(
 		@AuthenticationPrincipal UserPrincipal userPrincipal,
 		@RequestParam @Min(value = 1, message = "count는 1 이상이여야 합니다.") int count) {
-		return DataResponseBody.success(cartService.findRecentOrders(userPrincipal.id(), count), "SUCCESS");
+		Member member = memberService.findById(userPrincipal.id());
+		return DataResponseBody.success(cartService.findRecentOrders(member.getId(), count), "SUCCESS");
 	}
 
 	@Operation(summary = "바로 결제 버튼")
 	@PostMapping("/orders/payments-eager")
 	public BaseResponseBody createOrdersEager(@RequestBody @Valid CreateCartRequest createCartRequest,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		Long cartId = cartService.addCart(createCartRequest, userPrincipal.id());
+		Member member = memberService.findById(userPrincipal.id());
+		Long cartId = cartService.addCart(createCartRequest, member);
 
 		return DataResponseBody.success(cartService.findOrders(new CartIdsRequest(List.of(cartId))), "SUCCESS");
 	}

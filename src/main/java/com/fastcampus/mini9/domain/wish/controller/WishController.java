@@ -18,6 +18,8 @@ import com.fastcampus.mini9.domain.accommodation.controller.dto.response.GetAcco
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.service.usecase.AccommodationQuery;
 import com.fastcampus.mini9.domain.accommodation.service.util.AccommodationServiceMapper;
+import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.service.MemberService;
 import com.fastcampus.mini9.domain.wish.entity.Wish;
 import com.fastcampus.mini9.domain.wish.service.WishService;
 
@@ -28,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class WishController {
 
 	private final WishService wishService;
+	private final MemberService memberService;
 	private final AccommodationServiceMapper serviceMapper;
 	private final AccommodationDtoMapper dtoMapper;
 
@@ -36,7 +39,8 @@ public class WishController {
 		@PathVariable Long accommodationId,
 		@AuthenticationPrincipal UserPrincipal principal
 	) {
-		wishService.addWish(accommodationId, principal);
+		Member member = memberService.findById(principal.id());
+		wishService.addWish(accommodationId, member);
 		return BaseResponseBody.success("위시 등록 완료");
 	}
 
@@ -45,14 +49,16 @@ public class WishController {
 		@PathVariable Long accommodationId,
 		@AuthenticationPrincipal UserPrincipal principal
 	) {
-		wishService.deleteWish(accommodationId, principal);
+		Member member = memberService.findById(principal.id());
+		wishService.deleteWish(accommodationId, member);
 		return BaseResponseBody.success("위시 해제 완료");
 	}
 
 	@GetMapping("/wishes")
 	public DataResponseBody<List<GetAccommodationsResponse.GetAccommodation>> findWishes(
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		List<Wish> wishes = wishService.findWishes(userPrincipal);
+		Member member = memberService.findById(userPrincipal.id());
+		List<Wish> wishes = wishService.findWishes(member);
 		List<Accommodation> collect = wishes.stream().map(Wish::getAccommodation).collect(Collectors.toList());
 		List<AccommodationQuery.SearchAccommodation> searchAccommodations = serviceMapper.entityListToResponseList(
 			collect);

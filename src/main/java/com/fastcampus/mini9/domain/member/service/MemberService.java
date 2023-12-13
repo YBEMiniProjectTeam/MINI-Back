@@ -32,13 +32,8 @@ public class MemberService {
 	}
 
 	@Transactional(readOnly = true)
-	public MemberDto getProfile(String email) {
-		Member member = findByEmail(email);
-		return MemberDto.toDto(member);
-	}
-
-	public Member findByEmail(String email) {
-		return memberRepository.findByEmail(email)
+	public Member findById(Long id) {
+		return memberRepository.findById(id)
 			.orElseThrow(NotFoundMemberException::new);
 	}
 }

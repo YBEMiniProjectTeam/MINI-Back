@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fastcampus.mini9.common.response.BaseResponseBody;
 import com.fastcampus.mini9.common.response.DataResponseBody;
 import com.fastcampus.mini9.config.security.token.UserPrincipal;
+import com.fastcampus.mini9.domain.member.entity.Member;
+import com.fastcampus.mini9.domain.member.service.MemberService;
 import com.fastcampus.mini9.domain.payment.dto.FindAllPaymentResponse;
 import com.fastcampus.mini9.domain.payment.dto.FindDetailPaymentResponse;
 import com.fastcampus.mini9.domain.payment.service.PaymentService;
@@ -25,12 +27,14 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
 
 	private final PaymentService paymentService;
+	private final MemberService memberService;
 
 	@Operation(summary = "예약, 결제 전체 내역 조회")
 	@GetMapping
 	public DataResponseBody<List<FindAllPaymentResponse>> findAll(
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		return DataResponseBody.success(paymentService.findAll(userPrincipal.id()));
+		Member member = memberService.findById(userPrincipal.id());
+		return DataResponseBody.success(paymentService.findAll(member.getId()));
 	}
 
 	@Operation(summary = "예약, 결제 상세 내역 조회")

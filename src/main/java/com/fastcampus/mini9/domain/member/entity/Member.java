@@ -41,7 +41,7 @@ public class Member {
 	private List<Cart> carts = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
-	private List<Wish> wishList;
+	private List<Wish> wishList =  new ArrayList<>();
 
 	@Builder
 	private Member(String email, String pwd, String name, LocalDate birthday) {

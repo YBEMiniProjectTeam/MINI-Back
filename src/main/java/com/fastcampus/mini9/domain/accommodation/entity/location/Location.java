@@ -3,10 +3,14 @@ package com.fastcampus.mini9.domain.accommodation.entity.location;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Embeddable
 @Getter
+@Builder
+@AllArgsConstructor
 public class Location {
 
 	@ManyToOne

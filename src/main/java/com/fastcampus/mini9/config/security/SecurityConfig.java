@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -69,6 +70,8 @@ public class SecurityConfig {
 	private String frontUrl;
 	@Value("${remote-server.gateway.url}")
 	private String gatewayUrl;
+	@Value("${remote-server.cloudfront.url}")
+	private String cloudFrontUrl;
 	private String frontUrlLocal = "http://localhost:3000";
 	@Autowired
 	private AuthenticationConfiguration authenticationConfiguration;
@@ -137,7 +140,7 @@ public class SecurityConfig {
 
 		http
 			.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
-				.frameOptions(FrameOptionsConfig::sameOrigin));
+				.frameOptions(FrameOptionsConfig::disable));
 
 		return http.build();
 	}
@@ -147,12 +150,19 @@ public class SecurityConfig {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
 		corsConfiguration.addAllowedOriginPattern("*");
-		//        corsConfiguration.addAllowedOrigin(frontUrl);
-		//        corsConfiguration.addAllowedOrigin(gatewayUrl);
-		//        corsConfiguration.addAllowedOrigin(frontUrlLocal);
+//		        corsConfiguration.addAllowedOrigin(frontUrl);
+//		        corsConfiguration.addAllowedOrigin(gatewayUrl);
+//		        corsConfiguration.addAllowedOrigin(cloudFrontUrl);
+//		        corsConfiguration.addAllowedOrigin(frontUrlLocal);
 		corsConfiguration.addAllowedHeader("*");
-		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.addAllowedMethod(HttpMethod.GET);
+		corsConfiguration.addAllowedMethod(HttpMethod.POST);
+		corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+		corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+		corsConfiguration.addAllowedMethod(HttpMethod.OPTIONS);
+		corsConfiguration.addAllowedMethod(HttpMethod.HEAD);
 		corsConfiguration.setAllowCredentials(true);
+		corsConfiguration.addExposedHeader("Set-Cookie");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfiguration);

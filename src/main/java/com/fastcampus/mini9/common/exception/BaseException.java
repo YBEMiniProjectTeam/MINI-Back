@@ -2,7 +2,7 @@ package com.fastcampus.mini9.common.exception;
 
 public abstract class BaseException extends RuntimeException {
 
-	private final ErrorCode errorCode;
+	protected final ErrorCode errorCode;
 
 	public BaseException(ErrorCode errorCode) {
 		this.errorCode = errorCode;

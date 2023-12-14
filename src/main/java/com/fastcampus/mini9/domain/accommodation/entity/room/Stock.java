@@ -36,4 +36,12 @@ public class Stock {
 		this.date = date;
 		this.quantity = quantity;
 	}
+
+	public boolean isValidOrder(int orderQuantity) {
+		return quantity >= orderQuantity;
+	}
+
+	public void decrease(int orderQuantity) {
+		this.quantity -= orderQuantity;
+	}
 }

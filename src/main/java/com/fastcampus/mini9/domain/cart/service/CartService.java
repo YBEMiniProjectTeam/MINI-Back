@@ -1,5 +1,6 @@
 package com.fastcampus.mini9.domain.cart.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.fastcampus.mini9.common.exception.ErrorCode;
+import com.fastcampus.mini9.domain.accommodation.entity.room.Stock;
+import com.fastcampus.mini9.domain.accommodation.repository.StockRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,7 @@ public class CartService {
 	private final RoomRepository roomRepository;
 	private final ReservationRepository reservationRepository;
 	private final PaymentRepository paymentRepository;
+	private final StockRepository stockRepository;
 
 	public List<FindCartResponse> findCarts(Long memberId) {
 		Map<Long, List<Cart>> cartsByAccommodationId =
@@ -170,9 +175,19 @@ public class CartService {
 		}
 
 		for (Cart cart : carts) {
+			Room targetRoom = cart.getRoom();
+			LocalDate checkInDate = cart.getCheckInDate();
+			LocalDate checkOutDate = cart.getCheckOutDate();
+			int orderQuantity = cart.getQuantity();
 
-			// TODO: 재고 검증
-			// TODO: 재고 감소
+			List<Stock> stocks = stockRepository.findByRoomAndDateBetween(targetRoom, checkInDate, checkOutDate.minusDays(1));
+
+			boolean isValidOrder = stocks.stream().allMatch(stock -> stock.isValidOrder(orderQuantity));
+			if (!isValidOrder) {
+				throw new OutOfStockException(ErrorCode.OutOfStock);
+			} else {
+				stocks.stream().forEach(stock -> stock.decrease(orderQuantity));
+			}
 
 			// 결제 생성
 			Payment payment = Payment.builder()

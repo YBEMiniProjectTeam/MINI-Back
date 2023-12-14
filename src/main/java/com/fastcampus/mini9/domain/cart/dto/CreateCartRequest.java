@@ -15,14 +15,15 @@ import jakarta.validation.constraints.NotNull;
 public record CreateCartRequest(
 
 	@NotNull
-	@Min(1)
+	@Min(value = 1, message = "room_id는 최소 1 이상이어야 합니다.")
 	Long roomId,
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Future
+	@Future(message = "check_in_date는 현재보다 미래 날짜여야 합니다.")
 	LocalDate checkInDate,
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Future
-	LocalDate checkOutDate) {
+	@Future(message = "check_out_date는 현재보다 미래 날짜여야 합니다.")
+	LocalDate checkOutDate
+) {
 }

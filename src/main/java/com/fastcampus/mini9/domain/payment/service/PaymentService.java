@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.mini9.common.exception.EntityNotFoundException;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.payment.dto.FindAllPaymentResponse;
 import com.fastcampus.mini9.domain.payment.dto.FindDetailPaymentResponse;
@@ -50,13 +51,15 @@ public class PaymentService {
 
 	public FindDetailPaymentResponse findDetail(Long paymentId) {
 		Payment payment = paymentRepository.findById(paymentId)
-			.orElseThrow(() -> new NoSuchElementException("해당 결제내역이 존재하지 않습니다."));
+			.orElseThrow(() -> new EntityNotFoundException("해당 결제내역이 존재하지 않습니다."));
 
 		return paymentDtoMapper.paymentToDetailResponse(payment);
 	}
 
 	@Transactional
 	public void delete(Long paymentId) {
-		paymentRepository.findById(paymentId).orElseThrow().cancel();
+		Payment payment = paymentRepository.findById(paymentId)
+			.orElseThrow(() -> new EntityNotFoundException("해당 결제내역이 존재하지 않습니다."));
+		payment.cancel();
 	}
 }

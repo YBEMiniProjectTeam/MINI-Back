@@ -105,8 +105,8 @@ public class CartController {
 	public BaseResponseBody createOrdersEager(@RequestBody @Valid CreateCartRequest createCartRequest,
 		@AuthenticationPrincipal UserPrincipal userPrincipal) {
 		Long cartId = cartService.addCart(createCartRequest, userPrincipal.id());
-		CreateOrderRequest createOrderRequest = new CreateOrderRequest(List.of(cartId), null, null);
-		cartService.createOrder(createOrderRequest, userPrincipal.id());
+//		CreateOrderRequest createOrderRequest = new CreateOrderRequest(List.of(cartId), null, null);
+//		cartService.createOrder(createOrderRequest, userPrincipal.id());
 		return DataResponseBody.success(cartService.findOrders(new CartIdsRequest(List.of(cartId))), "SUCCESS");
 	}
 

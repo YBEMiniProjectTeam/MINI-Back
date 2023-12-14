@@ -1,11 +1,15 @@
 package com.fastcampus.mini9.domain.accommodation.controller.dto.response;
 
+import java.time.LocalTime;
+
 public record GetRoomResponse(
 	Long id,
 	String name,
 	Integer price,
 	Integer capacity,
 	Integer capacity_max,
+	LocalTime checkInAt,
+	LocalTime checkOutAt,
 	GetRoomDescription description
 ) {
 	public record GetRoomDescription(

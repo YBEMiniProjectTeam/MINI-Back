@@ -1,6 +1,7 @@
 package com.fastcampus.mini9.domain.accommodation.service.usecase;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.fastcampus.mini9.domain.accommodation.entity.room.RoomDetails;
@@ -79,6 +80,8 @@ public interface RoomQuery {
 		Integer price,
 		Integer capacity,
 		Integer capacity_max,
+		LocalTime checkInAt,
+		LocalTime checkOutAt,
 		Description description,
 		Integer stock
 	) {

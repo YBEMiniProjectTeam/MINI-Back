@@ -11,7 +11,7 @@ import com.fastcampus.mini9.domain.member.entity.Member;
 public interface AccommodationQuery {
 	SearchAccommodationsResponse searchAccommodations(SearchAccommodationsRequest request, UserPrincipal userPrincipal);
 
-	FindAccommodationResponse findAccommodation(FindAccommodationRequest request);
+	FindAccommodationResponse findAccommodation(FindAccommodationRequest request, UserPrincipal userPrincipal);
 
 	record SearchAccommodationsRequest(
 		String region,

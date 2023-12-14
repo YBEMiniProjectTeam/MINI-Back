@@ -2,7 +2,9 @@ package com.fastcampus.mini9.domain.accommodation.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import com.fastcampus.mini9.domain.wish.repository.WishRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class AccommodationService implements AccommodationQuery {
 	private final AccommodationRepository accommodationRepository;
 	private final MemberRepository memberRepository;
+	private final WishRepository wishRepository;
 	private final AccommodationServiceMapper mapper;
 
 	@Override
@@ -73,11 +76,17 @@ public class AccommodationService implements AccommodationQuery {
 
 	@Override
 	public FindAccommodationResponse findAccommodation(
-		FindAccommodationRequest findAccommodationRequest) {
+		FindAccommodationRequest findAccommodationRequest, UserPrincipal userPrincipal) {
 		Accommodation findAccommodation = accommodationRepository.findById(findAccommodationRequest.id())
 			.orElseThrow(() -> new EntityNotFoundException("해당 숙소를 찾을 수 없습니다."));
+		Optional<Member> loginMember = memberRepository.findById(userPrincipal.id());
+		boolean isWish = false;
+		if(loginMember.isPresent()) {
+			Member member = loginMember.get();
+			isWish = wishRepository.findAllByMember(member).stream().anyMatch(wish -> wish.getAccommodation().equals(findAccommodation));
+		}
 		FindAccommodationResponse findAccommodationResponse = mapper.entityToResponseDetail(
-			findAccommodation);
+			findAccommodation, isWish);
 		return findAccommodationResponse;
 	}
 }

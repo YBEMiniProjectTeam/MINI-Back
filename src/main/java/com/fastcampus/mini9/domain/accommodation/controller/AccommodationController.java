@@ -95,9 +95,9 @@ public class AccommodationController {
 		)
 	})
 	@GetMapping("/accommodations/{accommodationId}")
-	public DataResponseBody<GetAccommodationResponse> getAccommodation(@PathVariable Long accommodationId) {
+	public DataResponseBody<GetAccommodationResponse> getAccommodation(@PathVariable Long accommodationId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 		FindAccommodationRequest findRequest = new FindAccommodationRequest(accommodationId);
-		AccommodationQuery.FindAccommodationResponse findResult = accommodationQuery.findAccommodation(findRequest);
+		AccommodationQuery.FindAccommodationResponse findResult = accommodationQuery.findAccommodation(findRequest, userPrincipal);
 		GetAccommodationResponse result = mapper.findResultToDto(findResult);
 		return DataResponseBody.success(result, "SUCCESS");
 	}

@@ -27,10 +27,10 @@ public interface AccommodationServiceMapper {
 	@Mapping(target = "region", source = "accommodation.location.region.name")
 	@Mapping(target = "district", source = "accommodation.location.district.name")
 	@Mapping(target = "description", source = "accommodation.details")
-	// TODO: @Mapping(target = "isWish", source = "?")
+	 @Mapping(target = "isWish", source = "isWish")
 	// TODO: @Mapping(target = "totalWishCounts", source = "?")
 	@Mapping(target = "accommodation_image", source = "accommodation.imagesAsString")
-	FindAccommodationResponse entityToResponseDetail(Accommodation accommodation);
+	FindAccommodationResponse entityToResponseDetail(Accommodation accommodation, boolean isWish);
 
 	FindAccommodationDescription entityToDescription(AccommodationDetails details);
 }

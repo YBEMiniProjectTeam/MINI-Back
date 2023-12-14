@@ -1,6 +1,5 @@
 package com.fastcampus.mini9.domain.accommodation.service;
 
-import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,10 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,16 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.Accommodation;
 import com.fastcampus.mini9.domain.accommodation.entity.accommodation.AccommodationDetails;
-import com.fastcampus.mini9.domain.accommodation.entity.accommodation.AccommodationImage;
-import com.fastcampus.mini9.domain.accommodation.entity.location.Location;
 import com.fastcampus.mini9.domain.accommodation.entity.location.Region;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Room;
 import com.fastcampus.mini9.domain.accommodation.entity.room.RoomDetails;
 import com.fastcampus.mini9.domain.accommodation.entity.room.Stock;
 import com.fastcampus.mini9.domain.accommodation.repository.AccommodationRepository;
 import com.fastcampus.mini9.domain.accommodation.repository.RegionRepository;
-import com.fastcampus.mini9.domain.accommodation.repository.RoomDetailsRepository;
 import com.fastcampus.mini9.domain.accommodation.repository.RoomRepository;
+import com.fastcampus.mini9.domain.accommodation.repository.StockRepository;
 import com.fastcampus.mini9.domain.accommodation.vo.AccommodationType;
 
 import jakarta.persistence.EntityManager;
@@ -50,13 +45,12 @@ class AccommodationServiceTest {
 	private AccommodationService accommodationService;
 	@Autowired
 	private AccommodationRepository accommodationRepository;
-
-	@Autowired
-	private RoomDetailsRepository roomDetailsRepository;
 	@Autowired
 	private RoomRepository roomRepository;
 	@Autowired
 	private RegionRepository regionRepository;
+	@Autowired
+	private StockRepository stockRepository;
 	@Autowired
 	private EntityManager entityManager;
 
@@ -77,25 +71,6 @@ class AccommodationServiceTest {
 			.build();
 
 
-		// roomDetails = RoomDetails.builder()
-		// 	.id(1L)
-		// 	.airConditioner(true)
-		// 	.bathFacility(true)
-		// 	.bathtub(true)
-		// 	.homeTheater(true)
-		// 	.airConditioner(true)
-		// 	.tv(true)
-		// 	.pc(true)
-		// 	.internet(true)
-		// 	.refrigerator(true)
-		// 	.toiletries(true)
-		// 	.sofa(true)
-		// 	.cookware(true)
-		// 	.diningTable(true)
-		// 	.hairDryer(true)
-		// 	.build();
-
-
 		room = Room.builder()
 			.name("test room")
 			.price(400)
@@ -105,6 +80,28 @@ class AccommodationServiceTest {
 			.stocks(List.of(stock))
 			.payments(new ArrayList<>())
 			.build();
+
+		roomRepository.save(room);
+
+
+		roomDetails = RoomDetails.builder()
+			.id(room.getId())
+			.airConditioner(true)
+			.bathFacility(true)
+			.bathtub(true)
+			.homeTheater(true)
+			.airConditioner(true)
+			.tv(true)
+			.pc(true)
+			.internet(true)
+			.refrigerator(true)
+			.toiletries(true)
+			.sofa(true)
+			.cookware(true)
+			.diningTable(true)
+			.hairDryer(true)
+			.build();
+
 
 
 		accommodation = Accommodation.builder()
@@ -154,21 +151,182 @@ class AccommodationServiceTest {
 			.andDo(print());
 	}
 
-
 	@Test
-	@DisplayName("/accommodations/{accommodationId}/rooms 응답값")
-	public void findAccommodationRoomService() throws Exception {
+	@DisplayName("/accommodations/{accommodationId}/rooms 응답값 성공경우")
+	public void accommodationWithDetailsSuccess() throws Exception {
 
-		// Room room1 = roomRepository.save(room);
+		Stock stocks1 = Stock.builder()
+			.date(LocalDate.of(2023,12,11))
+			.quantity(4)
+			.build();
+
+		Stock stocks2 = Stock.builder()
+			.date(LocalDate.of(2023,12,12))
+			.quantity(4)
+			.build();
+
+
+		Stock stocks3 = Stock.builder()
+			.date(LocalDate.of(2023,12,13))
+			.quantity(4)
+			.build();
+
+		stockRepository.saveAll(List.of(stocks1,stocks2,stocks3));
+
+
+		entityManager.merge(roomDetails);
+		room = Room.builder()
+			.name("test room")
+			.price(400)
+			.numberOfRoom(3)
+			.capacity(2)
+			.capacityMax(4)
+			.payments(new ArrayList<>())
+			.details(roomDetails)
+			.stocks(List.of(stocks1,stocks2,stocks3))
+			.build();
+
+		Room savedRoom = roomRepository.save(room);
+
+
+		roomDetails = RoomDetails.builder()
+			.id(savedRoom.getId())
+			.airConditioner(true)
+			.bathFacility(true)
+			.bathtub(true)
+			.homeTheater(true)
+			.airConditioner(true)
+			.tv(true)
+			.pc(true)
+			.internet(true)
+			.refrigerator(true)
+			.toiletries(true)
+			.sofa(true)
+			.cookware(true)
+			.diningTable(true)
+			.hairDryer(true)
+			.build();
+
+		details = AccommodationDetails.builder()
+			.id(1L)
+			.description("test")
+			.address("서울시 강남구")
+			.latitude("123123123123")
+			.longitude("123123123123")
+			.tel("01023124123")
+			.parking(true)
+			.cooking(true)
+			.others("others")
+			.build();
+
+		accommodation = Accommodation.builder()
+			.type(AccommodationType.HOTEL)
+			.name("test")
+			.images(new ArrayList<>())
+			.checkIn(LocalTime.now())
+			.checkOut(LocalTime.now())
+			.details(details)
+			.rooms(List.of(room))
+			.build();
 
 		Accommodation savedAccommodation = accommodationRepository.save(accommodation);
 
 		mockMvc.perform(get("/accommodations/"+savedAccommodation.getId()+"/rooms")
-				.param("start_date","2023-12-13")
+				.param("start_date","2023-12-11")
 				.param("end_date","2023-12-13")
 				.param("guest_num", "2"))
 			.andExpect(status().isOk())
 			.andDo(print());
+
+
+	}
+
+	@Test
+	@DisplayName("/accommodations/{accommodationId}/rooms 응답값 실패일경우")
+	public void accommodationWithDetails() throws Exception {
+
+		Stock stocks1 = Stock.builder()
+			.date(LocalDate.of(2023,12,11))
+			.quantity(4)
+			.build();
+
+		Stock stocks2 = Stock.builder()
+			.date(LocalDate.of(2023,12,12))
+			.quantity(0)
+			.build();
+
+
+		Stock stocks3 = Stock.builder()
+			.date(LocalDate.of(2023,12,13))
+			.quantity(4)
+			.build();
+
+		stockRepository.saveAll(List.of(stocks1,stocks2,stocks3));
+
+		room = Room.builder()
+			.name("test room")
+			.price(400)
+			.numberOfRoom(3)
+			.capacity(2)
+			.capacityMax(4)
+			.payments(new ArrayList<>())
+			.details(roomDetails)
+			.stocks(List.of(stocks1,stocks2,stocks3))
+			.build();
+
+		Room savedRoom = roomRepository.save(room);
+
+
+		roomDetails = RoomDetails.builder()
+			.id(savedRoom.getId())
+			.airConditioner(true)
+			.bathFacility(true)
+			.bathtub(true)
+			.homeTheater(true)
+			.airConditioner(true)
+			.tv(true)
+			.pc(true)
+			.internet(true)
+			.refrigerator(true)
+			.toiletries(true)
+			.sofa(true)
+			.cookware(true)
+			.diningTable(true)
+			.hairDryer(true)
+			.build();
+
+		details = AccommodationDetails.builder()
+			.id(1L)
+			.description("test")
+			.address("서울시 강남구")
+			.latitude("123123123123")
+			.longitude("123123123123")
+			.tel("01023124123")
+			.parking(true)
+			.cooking(true)
+			.others("others")
+			.build();
+
+		accommodation = Accommodation.builder()
+			.type(AccommodationType.HOTEL)
+			.name("test")
+			.images(new ArrayList<>())
+			.checkIn(LocalTime.now())
+			.checkOut(LocalTime.now())
+			.details(details)
+			.rooms(List.of(room))
+			.build();
+
+		Accommodation savedAccommodation = accommodationRepository.save(accommodation);
+
+		mockMvc.perform(get("/accommodations/"+savedAccommodation.getId()+"/rooms")
+				.param("start_date","2023-12-11")
+				.param("end_date","2023-12-13")
+				.param("guest_num", "2"))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+
 	}
 
 }

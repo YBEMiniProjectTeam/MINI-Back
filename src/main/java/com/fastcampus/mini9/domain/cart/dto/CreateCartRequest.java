@@ -2,6 +2,7 @@ package com.fastcampus.mini9.domain.cart.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -19,7 +20,7 @@ public record CreateCartRequest(
 	Long roomId,
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Future(message = "check_in_date는 현재보다 미래 날짜여야 합니다.")
+	@FutureOrPresent(message = "check_in_date는 현재보다 미래 날짜여야 합니다.")
 	LocalDate checkInDate,
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

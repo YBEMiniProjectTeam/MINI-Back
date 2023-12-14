@@ -32,7 +32,6 @@ public class RoomService implements RoomQuery {
 		List<RoomResponse> responseList = accommodation.getRooms().stream()
 			.filter(Room -> Room.getCapacityMax() >= (request.guestNum() == null ? Room.getCapacityMax() :
 				request.guestNum()))
-			.filter(Room -> Room.hasStockBetween(request.startDate(), request.endDate(), request.guestNum()))
 			.map(room -> new RoomResponse(
 				room.getId(),
 				room.getName(),
@@ -40,7 +39,7 @@ public class RoomService implements RoomQuery {
 				room.getCapacity(),
 				room.getCapacityMax(),
 				Description.fromEntity(room.getDetails()),
-				2
+				room.getMinStock(request.startDate(), request.endDate())
 			))
 			.collect(Collectors.toList());
 		return new FindRoomsInAccommodationResponse(responseList);

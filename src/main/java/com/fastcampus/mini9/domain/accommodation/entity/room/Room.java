@@ -77,20 +77,16 @@ public class Room {
 	public void calcStock(ZonedDateTime checkIn, ZonedDateTime checkOut, int i) {
 	}
 
-	public boolean hasStockBetween(LocalDate startDate, LocalDate endDate, Long guestNum) {
+	public boolean hasStockBetween(LocalDate startDate, LocalDate endDate) {
 		return this.getStocks().size() != 0
 			&& this.getStocks().stream()
-			.filter(Stock ->
-				Stock.getDate().isAfter(startDate.minusDays(1L))
-					&& Stock.getDate().isBefore(endDate))
-			.allMatch(Stock -> Stock.getQuantity() >= guestNum);
+			.filter(Stock -> Stock.getDate().isAfter(startDate.minusDays(1L)) && Stock.getDate().isBefore(endDate))
+			.allMatch(Stock -> Stock.getQuantity() >= 1);
 	}
 
 	public int getMinStock(LocalDate startDate, LocalDate endDate) {
 		return this.getStocks().stream()
-			.filter(Stock ->
-				Stock.getDate().isAfter(startDate.minusDays(1L))
-					&& Stock.getDate().isBefore(endDate))
+			.filter(Stock -> Stock.getDate().isAfter(startDate.minusDays(1L)) && Stock.getDate().isBefore(endDate))
 			.mapToInt(Stock::getQuantity)
 			.min().orElse(0);
 	}
